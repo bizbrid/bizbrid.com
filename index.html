@@ -141,7 +141,7 @@ nav {
   font-style: italic;
   color: #6b5f55;
   margin-top: 18px;
-  animation: floatY 5s ease-in-out infinite;
+  animation: floatY 7s ease-in-out infinite;
   display: inline-block;
 }
 
@@ -519,17 +519,17 @@ footer {
 .divider { height: 1px; background-color: #ccc4bb; }
 
 /* ── SCROLL GLOW HIGHLIGHT ── */
-.pillar { transition: box-shadow 0.4s ease; }
+.pillar { transition: box-shadow 0.8s ease; }
 .pillar.glow-active {
   box-shadow: 0 0 32px rgba(200,185,168,0.55), inset 0 0 20px rgba(200,185,168,0.08);
 }
 
-.svc { transition: background 0.2s, box-shadow 0.4s ease; }
+.svc { transition: background 0.3s, box-shadow 0.8s ease; }
 .svc.glow-active {
   box-shadow: 0 0 28px rgba(138,155,170,0.5), inset 0 0 16px rgba(138,155,170,0.06);
 }
 
-.step { transition: box-shadow 0.4s ease; }
+.step { transition: box-shadow 0.8s ease; }
 .step.glow-active {
   box-shadow: 0 0 28px rgba(200,185,168,0.5);
 }
@@ -556,36 +556,36 @@ footer {
   opacity: 0;
 }
 
-.anim:nth-child(1) { animation-delay: 0.05s; }
-.anim:nth-child(2) { animation-delay: 0.2s; }
-.anim:nth-child(3) { animation-delay: 0.35s; }
-.anim:nth-child(4) { animation-delay: 0.5s; }
-.anim:nth-child(5) { animation-delay: 0.65s; }
-.anim:nth-child(6) { animation-delay: 0.8s; }
+.anim:nth-child(1) { animation-delay: 0.0s; }
+.anim:nth-child(2) { animation-delay: 0.18s; }
+.anim:nth-child(3) { animation-delay: 0.36s; }
+.anim:nth-child(4) { animation-delay: 0.54s; }
+.anim:nth-child(5) { animation-delay: 0.72s; }
+.anim:nth-child(6) { animation-delay: 0.90s; }
 
 /* Only animate when section is in view */
 .anim-group .anim { opacity: 0; }
 .anim-group.visible .anim {
-  animation: floatIn 0.65s ease forwards;
+  animation: floatIn 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 /* Glow on float-in — warm for pillars/steps, pewter for services */
 .pillars-grid.visible .anim,
 .process-grid.visible .anim {
-  animation: floatIn 0.65s ease forwards, glowPopWarm 1.2s ease forwards;
+  animation: floatIn 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards, glowPopWarm 2s ease forwards;
 }
 
 .services-grid.visible .anim {
-  animation: floatIn 0.65s ease forwards, glowPop 1.2s ease forwards;
+  animation: floatIn 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards, glowPop 2s ease forwards;
 }
 
 /* Glow delay must match float delay */
-.anim-group.visible .anim:nth-child(1) { animation-delay: 0.05s; }
-.anim-group.visible .anim:nth-child(2) { animation-delay: 0.2s; }
-.anim-group.visible .anim:nth-child(3) { animation-delay: 0.35s; }
-.anim-group.visible .anim:nth-child(4) { animation-delay: 0.5s; }
-.anim-group.visible .anim:nth-child(5) { animation-delay: 0.65s; }
-.anim-group.visible .anim:nth-child(6) { animation-delay: 0.8s; }
+.anim-group.visible .anim:nth-child(1) { animation-delay: 0.0s; }
+.anim-group.visible .anim:nth-child(2) { animation-delay: 0.18s; }
+.anim-group.visible .anim:nth-child(3) { animation-delay: 0.36s; }
+.anim-group.visible .anim:nth-child(4) { animation-delay: 0.54s; }
+.anim-group.visible .anim:nth-child(5) { animation-delay: 0.72s; }
+.anim-group.visible .anim:nth-child(6) { animation-delay: 0.90s; }
 
 /* ── MOBILE ── */
 /* Hamburger */
@@ -604,7 +604,7 @@ footer {
   height: 2px;
   background: #f0ebe4;
   border-radius: 2px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
   transform-origin: center;
 }
 .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -615,43 +615,73 @@ footer {
   top: 56px; left: 0; right: 0;
   background: #1e1a16;
   border-bottom: 1px solid #3a322a;
-  padding: 0 20px;
+  padding: 0 28px;
   display: flex;
   flex-direction: column;
   gap: 0;
   z-index: 998;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              padding 0.3s ease,
-              opacity 0.3s ease;
   opacity: 0;
+  /* Closing: fade + collapse */
+  transition:
+    max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease,
+    padding 0.4s ease;
 }
 .nav-mobile-open.open {
-  max-height: 280px;
-  padding: 8px 20px 16px;
+  max-height: 340px;
+  padding: 12px 28px 24px;
   opacity: 1;
+  /* Opening: expand then settle */
+  transition:
+    max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.35s ease,
+    padding 0.4s ease;
 }
 .nav-mobile-open a {
-  font-size: 16px;
-  font-weight: 400;
-  color: #f0ebe4;
+  font-size: 19px;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  color: rgba(240,235,228,0.5);
   text-decoration: none;
-  padding: 14px 0;
+  padding: 16px 0;
   border-bottom: 1px solid #2e2720;
-  transform: translateY(-6px);
   opacity: 0;
-  transition: transform 0.35s ease, opacity 0.35s ease;
+  transform: translateY(10px);
+  /* Default: closing transition */
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease,
+    color 0.2s ease;
 }
-.nav-mobile-open.open a {
-  transform: translateY(0);
-  opacity: 1;
-}
-.nav-mobile-open.open a:nth-child(1) { transition-delay: 0.05s; }
-.nav-mobile-open.open a:nth-child(2) { transition-delay: 0.10s; }
-.nav-mobile-open.open a:nth-child(3) { transition-delay: 0.15s; }
-.nav-mobile-open.open a:nth-child(4) { transition-delay: 0.20s; }
 .nav-mobile-open a:last-child { border-bottom: none; }
+.nav-mobile-open a:hover { color: #f0ebe4; }
+
+/* Opening: each link floats in slowly one by one */
+.nav-mobile-open.open a {
+  opacity: 1;
+  transform: translateY(0);
+}
+.nav-mobile-open.open a:nth-child(1) {
+  transition: transform 0.55s cubic-bezier(0.16,1,0.3,1) 0.08s,
+              opacity 0.45s ease 0.08s, color 0.2s ease;
+}
+.nav-mobile-open.open a:nth-child(2) {
+  transition: transform 0.55s cubic-bezier(0.16,1,0.3,1) 0.18s,
+              opacity 0.45s ease 0.18s, color 0.2s ease;
+}
+.nav-mobile-open.open a:nth-child(3) {
+  transition: transform 0.55s cubic-bezier(0.16,1,0.3,1) 0.28s,
+              opacity 0.45s ease 0.28s, color 0.2s ease;
+}
+.nav-mobile-open.open a:nth-child(4) {
+  transition: transform 0.55s cubic-bezier(0.16,1,0.3,1) 0.38s,
+              opacity 0.45s ease 0.38s, color 0.2s ease;
+  color: #8a9baa;
+  font-weight: 500;
+}
+.nav-mobile-open.open a:nth-child(4):hover { color: #cfdae3; }
 
 @media (max-width: 720px) {
   nav {
@@ -853,7 +883,7 @@ footer {
         <div>
           <div class="detail-row">
             <span class="detail-key">Email</span>
-            <span class="detail-val">chris@bizbrid.com</span>
+            <span class="detail-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a8cbc0dac1dbe8cac1d2cadac1cc86cbc7c5">[email&#160;protected]</a></span>
           </div>
           <div class="detail-row">
             <span class="detail-key">Website</span>
@@ -917,52 +947,67 @@ footer {
     <a href="#contact" onclick="closeMenu()">Get Involved</a>
   </div>
 
-  <script>
-    // Group float-in + glow on scroll
-    var groups = document.querySelectorAll('.anim-group');
-    if ('IntersectionObserver' in window) {
-      var groupObs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            groupObs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
-      groups.forEach(function(g) { groupObs.observe(g); });
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 
-      // Individual card glow as each enters viewport mid-scroll
-      var cards = document.querySelectorAll('.pillar, .svc, .step');
-      var cardObs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            var el = entry.target;
-            el.classList.add('glow-active');
-            setTimeout(function() { el.classList.remove('glow-active'); }, 1200);
-          }
-        });
-      }, { threshold: 0.4 });
-      cards.forEach(function(c) { cardObs.observe(c); });
-    } else {
-      groups.forEach(function(g) { g.classList.add('visible'); });
+  <script>
+    // NAV MENU TOGGLE
+    function toggleMenu() {
+      var m = document.getElementById('mobile-menu');
+      var h = document.getElementById('nav-hamburger');
+      if (m && h) {
+        m.classList.toggle('open');
+        h.classList.toggle('open');
+      }
     }
 
+    function closeMenu() {
+      var m = document.getElementById('mobile-menu');
+      var h = document.getElementById('nav-hamburger');
+      if (m) m.classList.remove('open');
+      if (h) h.classList.remove('open');
+    }
+
+    // FORM SELECT
     var sel = document.getElementById('role');
     if (sel) {
       sel.addEventListener('change', function() {
         sel.classList.add('filled');
       });
     }
-    function toggleMenu() {
-      var m = document.getElementById('mobile-menu');
-      var h = document.getElementById('nav-hamburger');
-      m.classList.toggle('open');
-      h.classList.toggle('open');
-    }
-    function closeMenu() {
-      document.getElementById('mobile-menu').classList.remove('open');
-      document.getElementById('nav-hamburger').classList.remove('open');
-    }
+
+    // SCROLL ANIMATIONS
+    try {
+      if ('IntersectionObserver' in window) {
+        // Float-in groups
+        var groups = document.querySelectorAll('.anim-group');
+        var groupObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              groupObs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+        groups.forEach(function(g) { groupObs.observe(g); });
+
+        // Card glow
+        var cards = document.querySelectorAll('.pillar, .svc, .step');
+        var cardObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              var el = entry.target;
+              el.classList.add('glow-active');
+              setTimeout(function() { el.classList.remove('glow-active'); }, 2000);
+            }
+          });
+        }, { threshold: 0.4 });
+        cards.forEach(function(c) { cardObs.observe(c); });
+      } else {
+        document.querySelectorAll('.anim-group').forEach(function(g) {
+          g.classList.add('visible');
+        });
+      }
+    } catch(e) {}
   </script>
 
 </body>
