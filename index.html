@@ -773,6 +773,8 @@
       border: none;
       cursor: pointer;
       padding: 4px;
+      z-index: 999;
+      position: relative;
     }
     .nav-hamburger span {
       display: block;
@@ -1192,12 +1194,31 @@
     <span class="footer-copy">&copy; 2025 BizBridge. Tennessee Nonprofit LLC.</span>
   </footer>
 
-  <!-- MOBILE MENU DRAWER -->
+  <!-- FULL OVERLAY MENU -->
   <div class="nav-mobile-open" id="mobile-menu">
+    <!-- Top brand bar -->
+    <div class="menu-overlay-brand">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M8 48 Q32 14 56 48" stroke="#f0ebe4" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <line x1="4" y1="48" x2="60" y2="48" stroke="#f0ebe4" stroke-width="4" stroke-linecap="round"/>
+        <line x1="20" y1="48" x2="20" y2="36" stroke="#8a9baa" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="32" y1="48" x2="32" y2="25" stroke="#8a9baa" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="44" y1="48" x2="44" y2="36" stroke="#8a9baa" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span class="menu-overlay-brand-name">BizBridge</span>
+    </div>
+
+    <!-- Big links -->
     <a href="#mission" onclick="closeMenu()">Mission</a>
     <a href="#services" onclick="closeMenu()">Services</a>
     <a href="#process" onclick="closeMenu()">Process</a>
     <a href="#contact" onclick="closeMenu()">Get Involved</a>
+
+    <!-- Bottom tagline -->
+    <div class="menu-overlay-foot">
+      <span class="menu-overlay-tag">Tennessee Nonprofit<br>Affordable Housing</span>
+      <span class="menu-overlay-url">bizbrid.com</span>
+    </div>
   </div>
 
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
