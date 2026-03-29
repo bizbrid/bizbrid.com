@@ -43,62 +43,136 @@
     /* ── NAV ── */
     nav {
       position: fixed;
-      position: -webkit-sticky;
       top: 0; left: 0; right: 0;
       z-index: 9999;
-      height: 56px;
-      min-height: 56px;
+      height: 60px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      background-color: #1e1a16 !important;
-      border-bottom: 1px solid #3a322a;
+      align-items: stretch;
+      background-color: #111009;
+      border-bottom: 1px solid rgba(138,155,170,0.15);
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
-      will-change: transform;
     }
 
+    /* Logo cell */
     .brand {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 10px;
       text-decoration: none;
+      padding: 0 28px;
+      border-right: 1px solid rgba(138,155,170,0.1);
+      flex-shrink: 0;
     }
 
     .brand-name {
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 600;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
       color: #f0ebe4;
       text-decoration: none;
     }
 
+    /* Links — fill remaining space */
     .nav-links {
       display: flex;
-      align-items: center;
-      gap: 20px;
+      align-items: stretch;
       list-style: none;
+      flex: 1;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links li {
+      display: flex;
+      align-items: stretch;
+      border-right: 1px solid rgba(138,155,170,0.08);
     }
 
     .nav-links a {
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
       font-size: 13px;
       font-weight: 400;
-      color: #a8998d;
+      letter-spacing: 0.02em;
+      color: rgba(240,235,228,0.38);
       text-decoration: none;
+      white-space: nowrap;
+      position: relative;
+      transition:
+        color 0.3s ease,
+        background 0.3s ease,
+        text-shadow 0.3s ease;
+    }
+
+    /* Bottom border indicator */
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(184,200,212,0.8), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      transform-origin: center;
+    }
+
+    .nav-links a:hover {
+      color: #f0ebe4;
+      background: rgba(255,255,255,0.04);
+      text-shadow:
+        0 0 10px rgba(255,255,255,0.9),
+        0 0 24px rgba(228,236,240,0.55),
+        0 0 48px rgba(184,200,212,0.25);
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-links a:active {
+      color: #ffffff;
+      background: rgba(255,255,255,0.07);
+      text-shadow:
+        0 0 6px rgba(255,255,255,1),
+        0 0 18px rgba(255,255,255,0.8);
+    }
+
+    /* CTA cell — right */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      border-left: 1px solid rgba(138,155,170,0.1);
+      flex-shrink: 0;
+      gap: 12px;
     }
 
     .nav-pill {
-      font-size: 13px !important;
-      font-weight: 500 !important;
-      color: #1e1a16 !important;
-      background-color: #8a9baa;
-      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #111009 !important;
+      background-color: #b8c8d4;
+      padding: 8px 20px;
       border-radius: 999px;
       text-decoration: none;
+      transition: background 0.25s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease;
+      display: inline-block;
+      white-space: nowrap;
     }
 
-    /* ── HERO ── */
+    .nav-pill:hover {
+      background-color: #d4e0e8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(184,200,212,0.4);
+      color: #111009 !important;
+    }
+
+    
+/* ── HERO ── */
     .hero {
       background-color: #f0ebe4;
       display: flex;
@@ -865,10 +939,12 @@
       nav {
         height: 56px;
         padding: 0 20px;
-        justify-content: space-between;
+        grid-template-columns: 1fr auto;
       }
       .nav-links { display: none; }
+      #nav-pill-desktop { display: none; }
       .nav-hamburger { display: flex; }
+      .nav-right { gap: 0; }
       .brand { display: flex; align-items: center; gap: 9px; }
       .brand-name { color: #f0ebe4; font-size: 17px; }
 
@@ -912,11 +988,13 @@
       <li><a href="#mission">Mission</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#process">Process</a></li>
-      <li><a href="#contact" class="nav-pill">Get Involved</a></li>
     </ul>
-    <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="nav-right">
+      <a href="#contact" class="nav-pill" id="nav-pill-desktop">Get Involved</a>
+      <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 
   <!-- HERO -->
