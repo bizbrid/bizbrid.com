@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BridgeKey">
+<meta name="theme-color" content="#0a0a0a">
+<title>BridgeKey — Unlock Your Next Home | BizBridge</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── BIZBRIDGE NAV ── */
+  .bk-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 99999;
+    height: 60px; display: flex; align-items: center; justify-content: space-between;
+    background-color: #111009; border-bottom: 1px solid rgba(138,155,170,0.15);
+    padding: 0 24px; font-family: 'Inter', sans-serif;
+  }
+  .bk-nav-left { display: flex; align-items: center; gap: 16px; }
+  .bk-nav-back {
+    font-size: 13px; color: rgba(240,235,228,0.4); text-decoration: none;
+    display: flex; align-items: center; gap: 6px;
+    transition: color 0.2s ease;
+  }
+  .bk-nav-back:hover { color: #f0ebe4; }
+  .bk-nav-divider { width: 1px; height: 24px; background: rgba(138,155,170,0.15); }
+  .bk-nav-title {
+    font-size: 15px; font-weight: 600; color: #f0ebe4; letter-spacing: -0.01em;
+  }
+  .bk-nav-title span { color: #c9a84c; }
+  .bk-nav-badge {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #c9a84c; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.2);
+    padding: 4px 10px; border-radius: 4px;
+  }
+  @media (max-width: 720px) {
+    .bk-nav { height: 52px; padding: 0 16px; }
+    .bk-nav-badge { display: none; }
+  }
+  :root {
+    --bg: #0a0a0a;
+    --bg-card: #141414;
+    --bg-elevated: #1a1a1a;
+    --text: #f0ede8;
+    --text-muted: rgba(240,237,232,0.55);
+    --text-dim: rgba(240,237,232,0.3);
+    --accent: #c9a84c;
+    --accent-dim: rgba(201,168,76,0.15);
+    --green: #6dba7a;
+    --green-dim: rgba(109,186,122,0.12);
+    --red: #d45d5d;
+    --red-dim: rgba(212,93,93,0.12);
+    --border: rgba(240,237,232,0.08);
+    --border-light: rgba(240,237,232,0.12);
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', 'Helvetica Neue', sans-serif;
+    --safe-top: env(safe-area-inset-top, 20px);
+    --safe-bottom: env(safe-area-inset-bottom, 20px);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { 
+    height: 100%; width: 100%; overflow: hidden;
+    background: var(--bg); color: var(--text);
+    padding-top: 60px;
+    font-family: var(--sans); -webkit-font-smoothing: antialiased;
+    touch-action: pan-y; overscroll-behavior: none;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+  input[type="number"] { -moz-appearance: textfield; }
+
+  /* ─── Screens ─── */
+  .screen {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: translateY(12px);
+  }
+  .screen.active {
+    opacity: 1; pointer-events: auto; transform: translateY(0);
+  }
+
+  /* ─── Splash ─── */
+  #splash {
+    justify-content: center; align-items: center;
+    cursor: pointer; position: relative; overflow: hidden;
+  }
+  #splash .glow {
+    position: absolute; top: 25%; left: 50%; transform: translate(-50%,-50%);
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  #splash .content {
+    text-align: center; z-index: 1;
+    opacity: 0; transform: translateY(24px);
+    animation: fadeUp 1s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  #splash .sub {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--text-dim); margin-bottom: 20px;
+  }
+  #splash h1 {
+    font-family: var(--serif); font-size: 52px; font-weight: 700;
+    color: var(--text); letter-spacing: -2px; line-height: 1;
+  }
+  #splash .tagline {
+    font-family: var(--serif); font-size: 16px; font-style: italic;
+    color: var(--text-muted); margin-top: 12px;
+  }
+  #splash .line {
+    width: 32px; height: 1px; background: var(--accent);
+    margin: 36px auto 0; opacity: 0.6;
+  }
+  #splash .tap {
+    font-family: var(--sans); font-size: 12px; color: var(--text-dim); margin-top: 28px;
+  }
+
+  /* ─── Onboard ─── */
+  #onboard {
+    justify-content: center; align-items: center; padding: 40px 32px;
+  }
+  #onboard .inner { text-align: left; max-width: 300px; width: 100%; transition: opacity 0.35s ease; }
+  #onboard .step-num {
+    font-family: var(--sans); font-size: 12px; letter-spacing: 3px;
+    color: var(--accent); margin-bottom: 24px; font-weight: 500;
+  }
+  #onboard h2 {
+    font-family: var(--serif); font-size: 32px; font-weight: 600;
+    color: var(--text); line-height: 1.15; letter-spacing: -0.5px;
+  }
+  #onboard h2 em { font-style: italic; color: var(--text-muted); font-weight: 500; }
+  #onboard .desc {
+    font-family: var(--sans); font-size: 14px; color: var(--text-muted);
+    line-height: 1.7; margin-top: 16px;
+  }
+  .dots { display: flex; gap: 6px; margin: 40px 0 32px; }
+  .dot {
+    height: 2px; border-radius: 1px; transition: all 0.4s ease;
+    background: var(--text-dim);
+  }
+  .dot.active { width: 28px; background: var(--accent); }
+  .dot:not(.active) { width: 6px; }
+
+  /* ─── Buttons ─── */
+  .btn-primary {
+    background: var(--accent); color: var(--bg);
+    border: none; padding: 14px 28px; border-radius: 8px;
+    font-family: var(--sans); font-size: 14px; font-weight: 600;
+    cursor: pointer; letter-spacing: 0.3px; transition: all 0.2s ease;
+    width: 100%;
+  }
+  .btn-primary:active { transform: scale(0.97); }
+
+  /* ─── Profile ─── */
+  #profile .profile-header {
+    padding: calc(var(--safe-top) + 28px) 28px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  #profile .profile-header .micro {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px;
+  }
+  #profile .profile-header h2 {
+    font-family: var(--serif); font-size: 26px; color: var(--text);
+    font-weight: 600; letter-spacing: -0.5px;
+  }
+  #profile .profile-header h2 em { font-style: italic; color: var(--text-muted); font-weight: 500; }
+  .profile-scroll { flex: 1; overflow-y: auto; padding: 24px 28px; -webkit-overflow-scrolling: touch; }
+  .field-label {
+    font-family: var(--sans); font-size: 10px; font-weight: 600;
+    color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .field-input {
+    width: 100%; padding: 13px 16px; padding-left: 34px;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text);
+    font-size: 15px; font-family: var(--sans); outline: none;
+    transition: border-color 0.2s ease;
+  }
+  .field-input:focus { border-color: var(--accent); }
+  .field-input-wrap { position: relative; margin-bottom: 22px; }
+  .field-input-wrap .dollar {
+    position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    font-family: var(--sans); font-size: 16px; color: var(--accent); font-weight: 600;
+  }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .chip {
+    padding: 7px 14px; border-radius: 20px; cursor: pointer;
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    white-space: nowrap; transition: all 0.2s ease;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .chip.selected {
+    background: var(--accent-dim); border-color: rgba(201,168,76,0.3);
+    color: var(--accent);
+  }
+  .chip.green.selected {
+    background: var(--green-dim); border-color: rgba(109,186,122,0.3);
+    color: var(--green);
+  }
+  .profile-footer { padding: 16px 28px calc(var(--safe-bottom) + 16px); }
+
+  /* ─── Swipe ─── */
+  #swipe .swipe-header {
+    padding: calc(var(--safe-top) + 28px) 24px 12px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  #swipe .swipe-header h2 {
+    font-family: var(--serif); font-size: 20px; color: var(--text);
+    font-weight: 600; letter-spacing: -0.5px;
+  }
+  .match-btn {
+    position: relative; background: var(--bg-elevated);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 7px 14px; color: var(--text); font-family: var(--sans);
+    font-size: 12px; cursor: pointer; font-weight: 500;
+  }
+  .match-btn .badge {
+    position: absolute; top: -5px; right: -5px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--accent); font-size: 9px; font-weight: 700;
+    color: var(--bg); display: flex; align-items: center; justify-content: center;
+  }
+  .card-area {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 4px 16px 0; position: relative; overflow: hidden;
+  }
+  .card-stack { position: relative; width: 100%; max-width: 380px; height: 100%; max-height: 600px; }
+
+  /* Card */
+  .property-card {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    border-radius: 14px; overflow: hidden;
+    background: var(--bg-card); border: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    will-change: transform; touch-action: none;
+    cursor: grab;
+  }
+  .property-card:active { cursor: grabbing; }
+  .property-card.behind {
+    transform: scale(0.95); opacity: 0.3; filter: blur(1px);
+    z-index: 0; pointer-events: none;
+  }
+  .property-card.exiting-left {
+    transition: all 0.3s ease-out;
+    transform: translateX(-120vw) rotate(-15deg); opacity: 0;
+  }
+  .property-card.exiting-right {
+    transition: all 0.3s ease-out;
+    transform: translateX(120vw) rotate(15deg); opacity: 0;
+  }
+  .card-image {
+    height: 50%; background-size: cover; background-position: center;
+    position: relative; transition: height 0.3s ease;
+  }
+  .card-image .gradient {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 100px;
+    background: linear-gradient(transparent, var(--bg-card));
+  }
+  .card-image .info { position: absolute; bottom: 14px; left: 16px; right: 16px; }
+  .card-badges { display: flex; gap: 6px; margin-bottom: 6px; }
+  .card-badge {
+    font-family: var(--sans); font-size: 9px; font-weight: 600;
+    letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 3px;
+  }
+  .card-badge.hqs { color: var(--green); background: rgba(109,186,122,0.1); border: 1px solid rgba(109,186,122,0.2); }
+  .card-badge.verified { color: var(--accent); background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2); }
+  .card-name {
+    font-family: var(--serif); font-size: 21px; color: var(--text);
+    font-weight: 600; letter-spacing: -0.3px;
+  }
+  .card-location {
+    font-family: var(--sans); font-size: 12px; color: var(--text-muted); margin-top: 2px;
+  }
+  .card-body { flex: 1; padding: 14px 16px; overflow-y: auto; background: var(--bg-card); }
+  .cost-box {
+    border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;
+  }
+  .cost-box.in-budget { background: var(--green-dim); border: 1px solid rgba(109,186,122,0.2); }
+  .cost-box.over-budget { background: var(--accent-dim); border: 1px solid rgba(201,168,76,0.2); }
+  .cost-row { display: flex; justify-content: space-between; align-items: baseline; }
+  .cost-label {
+    font-family: var(--sans); font-size: 11px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1.5px;
+  }
+  .cost-amount { font-family: var(--sans); font-size: 26px; font-weight: 700; }
+  .cost-amount.green { color: var(--green); }
+  .cost-amount.gold { color: var(--accent); }
+  .cost-amount span { font-size: 13px; font-weight: 400; color: var(--text-muted); }
+  .cost-detail { display: flex; justify-content: space-between; margin-top: 4px; }
+  .cost-detail span { font-family: var(--sans); font-size: 11px; color: var(--text-dim); }
+  .cost-status { font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 0.5px; }
+  .cost-status.in { color: var(--green); }
+  .cost-status.over { color: var(--red); }
+  .stats-row { display: flex; gap: 6px; margin-bottom: 12px; }
+  .stat-box {
+    flex: 1; text-align: center; padding: 8px 2px;
+    background: var(--bg-elevated); border-radius: 6px;
+    border: 1px solid var(--border);
+    font-family: var(--sans); font-size: 11px; color: var(--text-muted); font-weight: 500;
+  }
+  .amenities { display: flex; gap: 5px; flex-wrap: wrap; }
+  .amenity {
+    font-family: var(--sans); font-size: 10px; color: var(--text-muted);
+    padding: 4px 10px; border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+  .tap-hint {
+    font-family: var(--sans); font-size: 10px; color: var(--text-dim);
+    text-align: center; margin-top: 10px;
+  }
+  .expanded-info {
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
+    display: none;
+  }
+  .expanded-info.show { display: block; }
+  .score-row { display: flex; gap: 24px; }
+  .score-label {
+    font-family: var(--sans); font-size: 10px; color: var(--text-dim);
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px;
+  }
+  .score-value { font-family: var(--sans); font-size: 22px; font-weight: 700; }
+
+  /* Swipe indicators */
+  .swipe-label {
+    position: absolute; top: 28px; z-index: 10;
+    font-family: var(--sans); font-weight: 700; font-size: 15px; letter-spacing: 3px;
+    padding: 6px 14px; border-radius: 4px; opacity: 0;
+    pointer-events: none;
+  }
+  .swipe-label.pass { left: 20px; color: var(--red); border: 2px solid var(--red); transform: rotate(-12deg); }
+  .swipe-label.tour { right: 20px; color: var(--green); border: 2px solid var(--green); transform: rotate(12deg); }
+
+  /* Action buttons */
+  .actions {
+    display: flex; justify-content: center; gap: 28px;
+    padding: 10px 20px calc(var(--safe-bottom) + 16px);
+  }
+  .action-btn {
+    width: 58px; height: 58px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; cursor: pointer; transition: all 0.2s ease;
+    border: 1.5px solid;
+  }
+  .action-btn.pass-btn { background: var(--red-dim); border-color: rgba(212,93,93,0.3); }
+  .action-btn.tour-btn { background: var(--green-dim); border-color: rgba(109,186,122,0.3); }
+  .action-btn:active { transform: scale(1.1); }
+
+  /* ─── Done state ─── */
+  .done-state { text-align: center; padding: 40px 24px; }
+  .done-state .micro {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 3px;
+    color: var(--text-dim); text-transform: uppercase; margin-bottom: 16px;
+  }
+  .done-state h3 {
+    font-family: var(--serif); font-size: 28px; color: var(--text);
+    font-weight: 600; letter-spacing: -0.5px; margin-bottom: 8px;
+  }
+  .done-state h3 em { font-style: italic; color: var(--text-muted); font-weight: 500; }
+  .done-state p {
+    font-family: var(--sans); font-size: 14px; color: var(--text-muted);
+    line-height: 1.6; margin-bottom: 28px;
+  }
+  .done-state .btn-primary { width: auto; display: inline-block; }
+
+  /* ─── Matches ─── */
+  #matches .matches-header {
+    padding: calc(var(--safe-top) + 28px) 24px 16px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .back-btn {
+    background: none; border: none; color: var(--accent);
+    font-size: 18px; cursor: pointer; padding: 4px;
+  }
+  .matches-header .micro {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--text-dim); margin-bottom: 2px;
+  }
+  .matches-header h2 {
+    font-family: var(--serif); font-size: 22px; color: var(--text); font-weight: 600;
+  }
+  .matches-header h2 em { font-style: italic; color: var(--text-muted); font-weight: 500; }
+  .matches-scroll { flex: 1; overflow-y: auto; padding: 16px 24px; }
+  .match-card {
+    display: flex; gap: 14px; padding: 14px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; margin-bottom: 10px;
+  }
+  .match-thumb {
+    width: 80px; height: 80px; border-radius: 8px; flex-shrink: 0;
+    background-size: cover; background-position: center;
+  }
+  .match-info { flex: 1; min-width: 0; }
+  .match-name {
+    font-family: var(--serif); font-size: 15px; color: var(--text);
+    font-weight: 600; margin-bottom: 3px;
+  }
+  .match-meta {
+    font-family: var(--sans); font-size: 11px; color: var(--text-muted); margin-bottom: 10px;
+  }
+  .match-bottom { display: flex; justify-content: space-between; align-items: center; }
+  .match-price { font-family: var(--sans); font-size: 17px; font-weight: 700; color: var(--green); }
+  .match-price span { font-size: 11px; font-weight: 400; color: var(--text-dim); }
+  .tour-btn-small {
+    background: transparent; border: 1px solid var(--border-light);
+    color: var(--text); padding: 5px 12px; border-radius: 6px;
+    font-family: var(--sans); font-size: 11px; font-weight: 600; cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+  .empty-matches {
+    text-align: center; padding: 60px 20px;
+    font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<!-- BIZBRIDGE NAV -->
+<nav class="bk-nav">
+  <div class="bk-nav-left">
+    <a href="index.html" class="bk-nav-back">← BizBridge</a>
+    <div class="bk-nav-divider"></div>
+    <span class="bk-nav-title">Bridge<span>Key</span></span>
+  </div>
+  <span class="bk-nav-badge">Beta</span>
+</nav>
+
+<!-- ═══════ SPLASH ═══════ -->
+<div id="splash" class="screen active" onclick="goTo('onboard')">
+  <div class="glow"></div>
+  <div class="content">
+    <p class="sub">A BizBridge Product</p>
+    <h1>BridgeKey</h1>
+    <p class="tagline">Unlock your next home.</p>
+    <div class="line"></div>
+    <p class="tap">Tap to begin</p>
+  </div>
+</div>
+
+<!-- ═══════ ONBOARD ═══════ -->
+<div id="onboard" class="screen">
+  <div class="inner" id="onboard-inner">
+    <p class="step-num" id="ob-num">01</p>
+    <h2 id="ob-title"></h2>
+    <p class="desc" id="ob-desc"></p>
+    <div class="dots" id="ob-dots"></div>
+    <button class="btn-primary" id="ob-btn" onclick="nextOnboard()">Next</button>
+  </div>
+</div>
+
+<!-- ═══════ PROFILE ═══════ -->
+<div id="profile" class="screen">
+  <div class="profile-header">
+    <p class="micro">Profile</p>
+    <h2>Tell us about <em>your search.</em></h2>
+  </div>
+  <div class="profile-scroll">
+    <p class="field-label">Voucher Amount (Monthly)</p>
+    <div class="field-input-wrap">
+      <span class="dollar">$</span>
+      <input type="number" class="field-input" id="inp-voucher" placeholder="950">
+    </div>
+
+    <p class="field-label">Monthly Budget (Out of Pocket)</p>
+    <div class="field-input-wrap">
+      <span class="dollar">$</span>
+      <input type="number" class="field-input" id="inp-budget" placeholder="300">
+    </div>
+
+    <p class="field-label">Household Size</p>
+    <div class="chips" id="chips-household"></div>
+
+    <p class="field-label">Bedrooms</p>
+    <div class="chips" id="chips-bedrooms"></div>
+
+    <p class="field-label">Preferred Areas</p>
+    <div class="chips" id="chips-areas"></div>
+
+    <p class="field-label">Must-Haves</p>
+    <div class="chips" id="chips-musthaves"></div>
+  </div>
+  <div class="profile-footer">
+    <button class="btn-primary" onclick="goTo('swipe')">Start Swiping</button>
+  </div>
+</div>
+
+<!-- ═══════ SWIPE ═══════ -->
+<div id="swipe" class="screen">
+  <div class="swipe-header">
+    <h2>BridgeKey</h2>
+    <button class="match-btn" onclick="goTo('matches')">
+      <span id="match-count">0</span> matches
+      <span class="badge" id="match-badge" style="display:none">0</span>
+    </button>
+  </div>
+  <div class="card-area">
+    <div class="card-stack" id="card-stack"></div>
+    <div class="done-state" id="done-state" style="display:none">
+      <p class="micro">All caught up</p>
+      <h3 id="done-count"></h3>
+      <p>New listings are added daily. We'll notify you when something new fits your search.</p>
+      <button class="btn-primary" onclick="goTo('matches')">View Matches</button>
+    </div>
+  </div>
+  <div class="actions" id="actions">
+    <button class="action-btn pass-btn" onclick="swipeCard('left')">✕</button>
+    <button class="action-btn tour-btn" onclick="swipeCard('right')">🏠</button>
+  </div>
+</div>
+
+<!-- ═══════ MATCHES ═══════ -->
+<div id="matches" class="screen">
+  <div class="matches-header">
+    <button class="back-btn" onclick="goTo('swipe')">←</button>
+    <div>
+      <p class="micro">Your matches</p>
+      <h2 id="matches-title"></h2>
+    </div>
+  </div>
+  <div class="matches-scroll" id="matches-list"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════════ */
+const PROPERTIES = [
+  {
+    id:1, name:"Maple Ridge Apartments", address:"1247 Maple Ave, Memphis, TN 38104",
+    neighborhood:"Midtown", bd:2, ba:1, sqft:920, totalRent:1050, voucherCovers:780, oop:270,
+    amenities:["In-Unit Laundry","Central AC","Parking","Pet Friendly"],
+    image:"https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80",
+    available:"Apr 15, 2026", hqs:true, verified:true, walk:82, transit:64,
+  },
+  {
+    id:2, name:"Riverside Commons", address:"3820 Riverside Dr, Memphis, TN 38115",
+    neighborhood:"Hickory Hill", bd:3, ba:2, sqft:1280, totalRent:1200, voucherCovers:950, oop:250,
+    amenities:["Dishwasher","Fenced Yard","Garage","Playground"],
+    image:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80",
+    available:"May 1, 2026", hqs:true, verified:true, walk:45, transit:38,
+  },
+  {
+    id:3, name:"Union Lofts", address:"455 Union Ave, Memphis, TN 38103",
+    neighborhood:"Downtown", bd:1, ba:1, sqft:680, totalRent:895, voucherCovers:680, oop:215,
+    amenities:["Rooftop Access","Gym","Doorman","Bike Storage"],
+    image:"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
+    available:"Available Now", hqs:true, verified:false, walk:94, transit:78,
+  },
+  {
+    id:4, name:"Oakwood Village", address:"2100 Park Ave, Memphis, TN 38114",
+    neighborhood:"Orange Mound", bd:3, ba:1.5, sqft:1100, totalRent:975, voucherCovers:800, oop:175,
+    amenities:["Central AC","Washer/Dryer Hookup","Porch","Storage"],
+    image:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
+    available:"Apr 20, 2026", hqs:true, verified:true, walk:58, transit:42,
+  },
+  {
+    id:5, name:"Shelby Creek Townhomes", address:"780 Shelby Oaks Dr, Memphis, TN 38134",
+    neighborhood:"Bartlett", bd:2, ba:2, sqft:1050, totalRent:1150, voucherCovers:850, oop:300,
+    amenities:["Attached Garage","Patio","Community Pool","Dog Park"],
+    image:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
+    available:"May 15, 2026", hqs:false, verified:true, walk:35, transit:22,
+  },
+  {
+    id:6, name:"Parkway Flats", address:"1890 Elvis Presley Blvd, Memphis, TN 38106",
+    neighborhood:"Whitehaven", bd:2, ba:1, sqft:850, totalRent:925, voucherCovers:725, oop:200,
+    amenities:["Central AC","On-Site Laundry","Gated Entry","Bus Stop"],
+    image:"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
+    available:"Available Now", hqs:true, verified:true, walk:62, transit:55,
+  },
+  {
+    id:7, name:"Cordova Crossing", address:"990 N Germantown Pkwy, Cordova, TN 38018",
+    neighborhood:"Cordova", bd:3, ba:2.5, sqft:1400, totalRent:1350, voucherCovers:1050, oop:300,
+    amenities:["2-Car Garage","Fireplace","Patio","Walk-In Closets"],
+    image:"https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=800&q=80",
+    available:"Jun 1, 2026", hqs:true, verified:false, walk:28, transit:15,
+  },
+  {
+    id:8, name:"Frayser Family Homes", address:"2544 Dellwood Ave, Memphis, TN 38127",
+    neighborhood:"Frayser", bd:3, ba:1, sqft:1050, totalRent:850, voucherCovers:700, oop:150,
+    amenities:["Fenced Yard","Carport","Central AC","Near Schools"],
+    image:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80",
+    available:"Apr 10, 2026", hqs:true, verified:true, walk:40, transit:30,
+  },
+];
+
+/* ═══════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════ */
+let currentScreen = 'splash';
+let obStep = 0;
+let cardIndex = 0;
+let matchedProperties = [];
+let profile = { voucher:'', budget:'300', household:null, bedrooms:null, areas:[], mustHaves:[] };
+
+const obSteps = [
+  { num:'01', title:'Your voucher,<br><em>your power.</em>', desc:'Enter your voucher details. We only show homes you can actually afford. No heartbreak scrolling.' },
+  { num:'02', title:'Swipe to<br><em>discover.</em>', desc:'Love it? Swipe right to request a tour. Not for you? Swipe left. Simple as that.' },
+  { num:'03', title:'Connect and<br><em>move in.</em>', desc:'Match with landlords who welcome voucher holders. Schedule tours. Start your next chapter.' },
+];
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════ */
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  setTimeout(() => {
+    document.getElementById(id).classList.add('active');
+    currentScreen = id;
+    if (id === 'onboard') renderOnboard();
+    if (id === 'swipe') renderSwipe();
+    if (id === 'matches') renderMatches();
+  }, 50);
+}
+
+/* ═══════════════════════════════════════════
+   ONBOARD
+   ═══════════════════════════════════════════ */
+function renderOnboard() {
+  const s = obSteps[obStep];
+  document.getElementById('ob-num').textContent = s.num;
+  document.getElementById('ob-title').innerHTML = s.title;
+  document.getElementById('ob-desc').textContent = s.desc;
+  document.getElementById('ob-btn').textContent = obStep < 2 ? 'Next' : 'Build My Profile';
+  let dots = '';
+  obSteps.forEach((_, i) => { dots += `<div class="dot ${i === obStep ? 'active' : ''}"></div>`; });
+  document.getElementById('ob-dots').innerHTML = dots;
+}
+function nextOnboard() {
+  if (obStep < 2) {
+    const inner = document.getElementById('onboard-inner');
+    inner.style.opacity = '0';
+    setTimeout(() => { obStep++; renderOnboard(); inner.style.opacity = '1'; }, 300);
+  } else {
+    initProfile();
+    goTo('profile');
+  }
+}
+
+/* ═══════════════════════════════════════════
+   PROFILE
+   ═══════════════════════════════════════════ */
+function initProfile() {
+  renderChips('chips-household', ['1 person','2 people','3 people','4 people','5+ people'], 'household');
+  renderChips('chips-bedrooms', ['Studio','1 BR','2 BR','3 BR','4+ BR'], 'bedrooms');
+  renderChips('chips-areas', ['Downtown','Midtown','Hickory Hill','Orange Mound','Bartlett','Whitehaven','Frayser','Cordova'], 'areas', true);
+  renderChips('chips-musthaves', ['Pet Friendly','Parking','In-Unit Laundry','Accessible','Yard'], 'mustHaves', true, true);
+}
+
+function renderChips(containerId, options, key, multi=false, green=false) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  options.forEach(opt => {
+    const chip = document.createElement('button');
+    chip.className = 'chip' + (green ? ' green' : '');
+    chip.textContent = opt;
+    chip.onclick = () => {
+      if (multi) {
+        const arr = profile[key] || [];
+        if (arr.includes(opt)) { profile[key] = arr.filter(x => x !== opt); }
+        else { profile[key] = [...arr, opt]; }
+      } else {
+        profile[key] = profile[key] === opt ? null : opt;
+      }
+      updateChipStates(containerId, key, multi);
+    };
+    el.appendChild(chip);
+  });
+}
+
+function updateChipStates(containerId, key, multi) {
+  const el = document.getElementById(containerId);
+  const chips = el.querySelectorAll('.chip');
+  chips.forEach(c => {
+    const val = c.textContent;
+    const selected = multi ? (profile[key] || []).includes(val) : profile[key] === val;
+    c.classList.toggle('selected', selected);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   SWIPE ENGINE
+   ═══════════════════════════════════════════ */
+let dragState = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, el: null };
+
+function renderSwipe() {
+  const budget = parseInt(document.getElementById('inp-budget')?.value) || 300;
+  profile.budget = budget;
+  updateMatchUI();
+  renderCards();
+}
+
+function renderCards() {
+  const stack = document.getElementById('card-stack');
+  const actions = document.getElementById('actions');
+  const done = document.getElementById('done-state');
+  stack.innerHTML = '';
+
+  if (cardIndex >= PROPERTIES.length) {
+    actions.style.display = 'none';
+    done.style.display = 'block';
+    const n = matchedProperties.length;
+    document.getElementById('done-count').innerHTML = `${n} ${n === 1 ? 'match' : 'matches'} <em>found.</em>`;
+    return;
+  }
+
+  actions.style.display = 'flex';
+  done.style.display = 'none';
+
+  // Behind card
+  if (cardIndex + 1 < PROPERTIES.length) {
+    const behind = buildCard(PROPERTIES[cardIndex + 1], true);
+    stack.appendChild(behind);
+  }
+
+  // Active card
+  const card = buildCard(PROPERTIES[cardIndex], false);
+  stack.appendChild(card);
+  initDrag(card);
+}
+
+function buildCard(p, isBehind) {
+  const budget = profile.budget;
+  const inBudget = p.oop <= budget;
+  const avail = p.available === 'Available Now' ? 'Now' : p.available.replace(', 2026','');
+  const scoreColor = v => v >= 70 ? 'var(--green)' : v >= 50 ? 'var(--accent)' : 'var(--red)';
+
+  const div = document.createElement('div');
+  div.className = 'property-card' + (isBehind ? ' behind' : '');
+  div.innerHTML = `
+    <div class="swipe-label pass">PASS</div>
+    <div class="swipe-label tour">TOUR</div>
+    <div class="card-image" style="background-image:url('${p.image}')">
+      <div class="gradient"></div>
+      <div class="info">
+        <div class="card-badges">
+          ${p.hqs ? '<span class="card-badge hqs">HQS Inspected</span>' : ''}
+          ${p.verified ? '<span class="card-badge verified">Verified</span>' : ''}
+        </div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-location">${p.neighborhood} · ${p.address.split(',')[0]}</div>
+      </div>
+    </div>
+    <div class="card-body" onclick="toggleExpand(this)">
+      <div class="cost-box ${inBudget ? 'in-budget' : 'over-budget'}">
+        <div class="cost-row">
+          <span class="cost-label">Your cost</span>
+          <span class="cost-amount ${inBudget ? 'green' : 'gold'}">$${p.oop}<span>/mo</span></span>
+        </div>
+        <div class="cost-detail">
+          <span>Total $${p.totalRent} · Voucher $${p.voucherCovers}</span>
+          <span class="cost-status ${inBudget ? 'in' : 'over'}">${inBudget ? 'IN BUDGET' : 'OVER BUDGET'}</span>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box">${p.bd} BD</div>
+        <div class="stat-box">${p.ba} BA</div>
+        <div class="stat-box">${p.sqft} sf</div>
+        <div class="stat-box">${avail}</div>
+      </div>
+      <div class="amenities">
+        ${p.amenities.map(a => `<span class="amenity">${a}</span>`).join('')}
+      </div>
+      <div class="expanded-info">
+        <div class="score-row">
+          <div>
+            <p class="score-label">Walk Score</p>
+            <p class="score-value" style="color:${scoreColor(p.walk)}">${p.walk}</p>
+          </div>
+          <div>
+            <p class="score-label">Transit</p>
+            <p class="score-value" style="color:${scoreColor(p.transit)}">${p.transit}</p>
+          </div>
+        </div>
+      </div>
+      <p class="tap-hint">Tap for details</p>
+    </div>
+  `;
+  return div;
+}
+
+function toggleExpand(body) {
+  const info = body.querySelector('.expanded-info');
+  const hint = body.querySelector('.tap-hint');
+  const isShowing = info.classList.contains('show');
+  info.classList.toggle('show');
+  hint.textContent = isShowing ? 'Tap for details' : 'Tap to collapse';
+}
+
+/* ─── Touch/Mouse Drag ─── */
+function initDrag(card) {
+  const onStart = (x, y) => {
+    dragState = { active: true, startX: x, startY: y, dx: 0, dy: 0, el: card };
+    card.style.transition = 'none';
+  };
+  const onMove = (x, y) => {
+    if (!dragState.active) return;
+    dragState.dx = x - dragState.startX;
+    dragState.dy = y - dragState.startY;
+    const rot = dragState.dx * 0.06;
+    card.style.transform = `translateX(${dragState.dx}px) translateY(${dragState.dy * 0.2}px) rotate(${rot}deg)`;
+    // Labels
+    const pass = card.querySelector('.swipe-label.pass');
+    const tour = card.querySelector('.swipe-label.tour');
+    pass.style.opacity = Math.min(1, Math.max(0, -dragState.dx / 80));
+    tour.style.opacity = Math.min(1, Math.max(0, dragState.dx / 80));
+  };
+  const onEnd = () => {
+    if (!dragState.active) return;
+    dragState.active = false;
+    if (Math.abs(dragState.dx) > 100) {
+      const dir = dragState.dx > 0 ? 'right' : 'left';
+      completeSwipe(dir);
+    } else {
+      card.style.transition = 'all 0.4s cubic-bezier(0.16,1,0.3,1)';
+      card.style.transform = '';
+      card.querySelector('.swipe-label.pass').style.opacity = '0';
+      card.querySelector('.swipe-label.tour').style.opacity = '0';
+    }
+  };
+
+  card.addEventListener('mousedown', e => { e.preventDefault(); onStart(e.clientX, e.clientY); });
+  window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+  window.addEventListener('mouseup', onEnd);
+  card.addEventListener('touchstart', e => onStart(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+  card.addEventListener('touchmove', e => onMove(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+  card.addEventListener('touchend', onEnd);
+}
+
+function completeSwipe(dir) {
+  const card = dragState.el;
+  card.classList.add(dir === 'right' ? 'exiting-right' : 'exiting-left');
+
+  if (dir === 'right') {
+    matchedProperties.push(PROPERTIES[cardIndex]);
+    updateMatchUI();
+  }
+
+  setTimeout(() => { cardIndex++; renderCards(); }, 300);
+}
+
+function swipeCard(dir) {
+  const stack = document.getElementById('card-stack');
+  const card = stack.querySelector('.property-card:not(.behind)');
+  if (!card) return;
+  dragState.el = card;
+  card.classList.add(dir === 'right' ? 'exiting-right' : 'exiting-left');
+  if (dir === 'right') {
+    matchedProperties.push(PROPERTIES[cardIndex]);
+    updateMatchUI();
+  }
+  setTimeout(() => { cardIndex++; renderCards(); }, 300);
+}
+
+function updateMatchUI() {
+  const n = matchedProperties.length;
+  document.getElementById('match-count').textContent = n;
+  const badge = document.getElementById('match-badge');
+  if (n > 0) { badge.style.display = 'flex'; badge.textContent = n; }
+  else { badge.style.display = 'none'; }
+}
+
+/* ═══════════════════════════════════════════
+   MATCHES
+   ═══════════════════════════════════════════ */
+function renderMatches() {
+  const n = matchedProperties.length;
+  document.getElementById('matches-title').innerHTML = `${n} ${n===1?'home':'homes'} <em>saved.</em>`;
+  const list = document.getElementById('matches-list');
+
+  if (n === 0) {
+    list.innerHTML = '<p class="empty-matches">No matches yet. Keep swiping.</p>';
+    return;
+  }
+
+  list.innerHTML = matchedProperties.map(p => `
+    <div class="match-card">
+      <div class="match-thumb" style="background-image:url('${p.image}')"></div>
+      <div class="match-info">
+        <div class="match-name">${p.name}</div>
+        <div class="match-meta">${p.neighborhood} · ${p.bd}BD / ${p.ba}BA</div>
+        <div class="match-bottom">
+          <span class="match-price">$${p.oop}<span>/mo</span></span>
+          <button class="tour-btn-small" onclick="requestTour('${p.name}')">Request Tour</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function requestTour(name) {
+  alert('Tour request sent for ' + name + '! A BridgeKey coordinator will follow up within 24 hours.');
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════ */
+renderOnboard();
+</script>
+</body>
+</html>
