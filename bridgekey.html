@@ -1,911 +1,354 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="color-scheme: light only;">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="BridgeKey">
-<meta name="theme-color" content="#0a0a0a">
-<title>BridgeKey — Unlock Your Next Home | BizBridge</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="color-scheme" content="light only" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="BridgeKey" />
+<title>BridgeKey — BizBridge</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
 <style>
-  /* ── BIZBRIDGE NAV ── */
-  .bk-nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 99999;
-    height: 60px; display: flex; align-items: center; justify-content: space-between;
-    background-color: #111009; border-bottom: 1px solid rgba(138,155,170,0.15);
-    padding: 0 24px; font-family: 'Inter', sans-serif;
-  }
-  .bk-nav-left { display: flex; align-items: center; gap: 16px; }
-  .bk-nav-back {
-    font-size: 13px; color: rgba(240,235,228,0.4); text-decoration: none;
-    display: flex; align-items: center; gap: 6px;
-    transition: color 0.2s ease;
-  }
-  .bk-nav-back:hover { color: #f0ebe4; }
-  .bk-nav-divider { width: 1px; height: 24px; background: rgba(138,155,170,0.15); }
-  .bk-nav-title {
-    font-size: 15px; font-weight: 600; color: #f0ebe4; letter-spacing: -0.01em;
-  }
-  .bk-nav-title span { color: #c9a84c; }
-  .bk-nav-badge {
-    font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-    color: #c9a84c; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.2);
-    padding: 4px 10px; border-radius: 4px;
-  }
-  @media (max-width: 720px) {
-    .bk-nav { height: 52px; padding: 0 16px; }
-    .bk-nav-badge { display: none; }
-  }
-  :root {
-    --bg: #0a0a0a;
-    --bg-card: #141414;
-    --bg-elevated: #1a1a1a;
-    --text: #f0ede8;
-    --text-muted: rgba(240,237,232,0.55);
-    --text-dim: rgba(240,237,232,0.3);
-    --accent: #c9a84c;
-    --accent-dim: rgba(201,168,76,0.15);
-    --green: #6dba7a;
-    --green-dim: rgba(109,186,122,0.12);
-    --red: #d45d5d;
-    --red-dim: rgba(212,93,93,0.12);
-    --border: rgba(240,237,232,0.08);
-    --border-light: rgba(240,237,232,0.12);
-    --serif: 'Playfair Display', Georgia, serif;
-    --sans: 'DM Sans', 'Helvetica Neue', sans-serif;
-    --safe-top: env(safe-area-inset-top, 20px);
-    --safe-bottom: env(safe-area-inset-bottom, 20px);
-  }
+  :root { color-scheme: light only; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { 
-    height: 100%; width: 100%; overflow: hidden;
-    background: var(--bg); color: var(--text);
-    padding-top: 60px;
-    font-family: var(--sans); -webkit-font-smoothing: antialiased;
-    touch-action: pan-y; overscroll-behavior: none;
+  html, body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    font-size: 16px; line-height: 1.5;
+    background-color: #f0ebe4 !important; color: #1e1a16 !important;
+    -webkit-font-smoothing: antialiased; height: 100%; overflow-x: hidden;
   }
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
   input[type="number"] { -moz-appearance: textfield; }
 
-  /* ─── Screens ─── */
-  .screen {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    display: flex; flex-direction: column;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    transform: translateY(12px);
-  }
-  .screen.active {
-    opacity: 1; pointer-events: auto; transform: translateY(0);
-  }
+  /* ── NAV (identical to bizbrid.com) ── */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; height: 60px; display: flex; align-items: stretch; background-color: #111009; border-bottom: 1px solid rgba(138,155,170,0.15); }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; padding: 0 28px; border-right: 1px solid rgba(138,155,170,0.1); flex-shrink: 0; }
+  .brand-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: #f0ebe4; }
+  .nav-links { display: flex; align-items: stretch; list-style: none; flex: 1; }
+  .nav-links li { display: flex; align-items: stretch; border-right: 1px solid rgba(138,155,170,0.08); }
+  .nav-links a { display: flex; align-items: center; padding: 0 28px; font-size: 13px; font-weight: 400; letter-spacing: 0.02em; color: rgba(240,235,228,0.38); text-decoration: none; position: relative; transition: color 0.3s ease, background 0.3s ease, text-shadow 0.3s ease; }
+  .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(184,200,212,0.8), transparent); transform: scaleX(0); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+  .nav-links a:hover { color: #f0ebe4; background: rgba(255,255,255,0.04); text-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 24px rgba(228,236,240,0.55); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-links a.active-page { color: #f0ebe4; font-weight: 500; }
+  .nav-links a.active-page::after { transform: scaleX(1); background: linear-gradient(90deg, transparent, rgba(138,155,170,0.6), transparent); }
+  .nav-right { display: flex; align-items: center; padding: 0 24px; border-left: 1px solid rgba(138,155,170,0.1); flex-shrink: 0; }
+  .nav-pill { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #111009 !important; background-color: #b8c8d4; padding: 8px 20px; border-radius: 999px; text-decoration: none; transition: background 0.25s ease; }
+  .nav-pill:hover { background-color: #d4e0e8; }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; z-index: 999; }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: #f0ebe4; border-radius: 2px; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease; transform-origin: center; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .nav-mobile-open { position: fixed; top: 56px; left: 0; right: 0; background: #1e1a16; border-bottom: 1px solid #3a322a; padding: 0 28px; display: flex; flex-direction: column; z-index: 998; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.55s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease, padding 0.4s ease; }
+  .nav-mobile-open.open { max-height: 400px; padding: 12px 28px 24px; opacity: 1; transition: max-height 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease, padding 0.4s ease; }
+  .nav-mobile-open a { font-size: 19px; font-weight: 300; color: rgba(240,235,228,0.5); text-decoration: none; padding: 16px 0; border-bottom: 1px solid #2e2720; opacity: 0; transform: translateY(10px); transition: transform 0.25s ease, opacity 0.25s ease; }
+  .nav-mobile-open a:last-child { border-bottom: none; }
+  .nav-mobile-open.open a { opacity: 1; transform: translateY(0); }
+  .nav-mobile-open.open a:nth-child(1) { transition: transform 0.55s cubic-bezier(0.16,1,0.3,1) 0.08s, opacity 0.45s ease 0.08s; }
+  .nav-mobile-open.open a:nth-child(2) { transition: transform 0.55s cubic-bezier(0.16,1,0.3,1) 0.18s, opacity 0.45s ease 0.18s; }
+  .nav-mobile-open.open a:nth-child(3) { transition: transform 0.55s cubic-bezier(0.16,1,0.3,1) 0.28s, opacity 0.45s ease 0.28s; }
+  .nav-mobile-open.open a:nth-child(4) { transition: transform 0.55s cubic-bezier(0.16,1,0.3,1) 0.38s, opacity 0.45s ease 0.38s; }
 
-  /* ─── Splash ─── */
-  #splash {
-    justify-content: center; align-items: center;
-    cursor: pointer; position: relative; overflow: hidden;
-  }
-  #splash .glow {
-    position: absolute; top: 25%; left: 50%; transform: translate(-50%,-50%);
-    width: 400px; height: 400px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  #splash .content {
-    text-align: center; z-index: 1;
-    opacity: 0; transform: translateY(24px);
-    animation: fadeUp 1s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
-  }
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
-  #splash .sub {
-    font-family: var(--sans); font-size: 11px; letter-spacing: 4px;
-    text-transform: uppercase; color: var(--text-dim); margin-bottom: 20px;
-  }
-  #splash h1 {
-    font-family: var(--serif); font-size: 52px; font-weight: 700;
-    color: var(--text); letter-spacing: -2px; line-height: 1;
-  }
-  #splash .tagline {
-    font-family: var(--serif); font-size: 16px; font-style: italic;
-    color: var(--text-muted); margin-top: 12px;
-  }
-  #splash .line {
-    width: 32px; height: 1px; background: var(--accent);
-    margin: 36px auto 0; opacity: 0.6;
-  }
-  #splash .tap {
-    font-family: var(--sans); font-size: 12px; color: var(--text-dim); margin-top: 28px;
-  }
+  /* ── HERO ── */
+  .bk-hero { background-color: #f0ebe4; padding: 100px 24px 60px; text-align: center; border-bottom: 1px solid #ccc4bb; }
+  .bk-hero .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8a9baa; margin-bottom: 14px; }
+  .bk-hero h1 { font-size: clamp(32px, 7vw, 64px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.04; color: #1e1a16; max-width: 600px; margin: 0 auto 14px; }
+  .bk-hero h1 .pewter { color: #8a9baa; }
+  .bk-hero .sub { font-size: clamp(14px, 2vw, 17px); font-weight: 300; font-style: italic; color: #6b5f55; max-width: 440px; margin: 0 auto; }
 
-  /* ─── Onboard ─── */
-  #onboard {
-    justify-content: center; align-items: center; padding: 40px 32px;
-  }
-  #onboard .inner { text-align: left; max-width: 300px; width: 100%; transition: opacity 0.35s ease; }
-  #onboard .step-num {
-    font-family: var(--sans); font-size: 12px; letter-spacing: 3px;
-    color: var(--accent); margin-bottom: 24px; font-weight: 500;
-  }
-  #onboard h2 {
-    font-family: var(--serif); font-size: 32px; font-weight: 600;
-    color: var(--text); line-height: 1.15; letter-spacing: -0.5px;
-  }
-  #onboard h2 em { font-style: italic; color: var(--text-muted); font-weight: 500; }
-  #onboard .desc {
-    font-family: var(--sans); font-size: 14px; color: var(--text-muted);
-    line-height: 1.7; margin-top: 16px;
-  }
-  .dots { display: flex; gap: 6px; margin: 40px 0 32px; }
-  .dot {
-    height: 2px; border-radius: 1px; transition: all 0.4s ease;
-    background: var(--text-dim);
-  }
-  .dot.active { width: 28px; background: var(--accent); }
-  .dot:not(.active) { width: 6px; }
+  /* ── APP CONTAINER ── */
+  .bk-app { max-width: 480px; margin: 0 auto; padding: 0 20px 40px; }
+  .bk-screen { display: none; }
+  .bk-screen.active { display: block; }
 
-  /* ─── Buttons ─── */
-  .btn-primary {
-    background: var(--accent); color: var(--bg);
-    border: none; padding: 14px 28px; border-radius: 8px;
-    font-family: var(--sans); font-size: 14px; font-weight: 600;
-    cursor: pointer; letter-spacing: 0.3px; transition: all 0.2s ease;
-    width: 100%;
-  }
-  .btn-primary:active { transform: scale(0.97); }
+  /* ── PROFILE ── */
+  .bk-profile { padding-top: 40px; }
+  .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8a9baa; margin-bottom: 10px; }
+  .bk-profile h2 { font-size: 28px; font-weight: 600; letter-spacing: -0.025em; color: #1e1a16; margin-bottom: 6px; }
+  .bk-profile h2 em { font-style: italic; color: #8a9baa; }
+  .bk-profile > p { font-size: 14px; font-weight: 300; color: #6b5f55; margin-bottom: 32px; }
+  .f-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #a8998d; margin-bottom: 8px; }
+  .f-input-wrap { position: relative; margin-bottom: 24px; }
+  .f-input-wrap .dollar { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px; font-weight: 600; color: #8a9baa; }
+  .f-input { width: 100%; padding: 13px 16px 13px 32px; background: #e8e1d9; border: 1px solid #ccc4bb; border-radius: 10px; color: #1e1a16; font-size: 15px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+  .f-input:focus { border-color: #8a9baa; }
+  .f-input::placeholder { color: #a8998d; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .chip { padding: 8px 16px; border-radius: 999px; cursor: pointer; font-size: 13px; font-weight: 400; background: #e8e1d9; border: 1px solid #ccc4bb; color: #6b5f55; transition: all 0.2s; font-family: inherit; }
+  .chip.selected { background: #28211b; border-color: #28211b; color: #f0ebe4; }
+  .chip.selected-alt { background: #8a9baa; border-color: #8a9baa; color: #f0ebe4; }
+  .btn-dark { display: inline-flex; align-items: center; gap: 6px; background-color: #1e1a16; color: #f0ebe4; font-size: 15px; font-weight: 500; padding: 14px 28px; border-radius: 999px; border: none; cursor: pointer; font-family: inherit; width: 100%; justify-content: center; margin-top: 8px; }
 
-  /* ─── Profile ─── */
-  #profile .profile-header {
-    padding: calc(var(--safe-top) + 28px) 28px 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  #profile .profile-header .micro {
-    font-family: var(--sans); font-size: 11px; letter-spacing: 3px;
-    text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px;
-  }
-  #profile .profile-header h2 {
-    font-family: var(--serif); font-size: 26px; color: var(--text);
-    font-weight: 600; letter-spacing: -0.5px;
-  }
-  #profile .profile-header h2 em { font-style: italic; color: var(--text-muted); font-weight: 500; }
-  .profile-scroll { flex: 1; overflow-y: auto; padding: 24px 28px; -webkit-overflow-scrolling: touch; }
-  .field-label {
-    font-family: var(--sans); font-size: 10px; font-weight: 600;
-    color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px;
-    margin-bottom: 8px;
-  }
-  .field-input {
-    width: 100%; padding: 13px 16px; padding-left: 34px;
-    background: var(--bg-elevated); border: 1px solid var(--border);
-    border-radius: 8px; color: var(--text);
-    font-size: 15px; font-family: var(--sans); outline: none;
-    transition: border-color 0.2s ease;
-  }
-  .field-input:focus { border-color: var(--accent); }
-  .field-input-wrap { position: relative; margin-bottom: 22px; }
-  .field-input-wrap .dollar {
-    position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
-    font-family: var(--sans); font-size: 16px; color: var(--accent); font-weight: 600;
-  }
-  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
-  .chip {
-    padding: 7px 14px; border-radius: 20px; cursor: pointer;
-    font-family: var(--sans); font-size: 12px; font-weight: 500;
-    white-space: nowrap; transition: all 0.2s ease;
-    background: transparent; border: 1px solid var(--border);
-    color: var(--text-muted);
-  }
-  .chip.selected {
-    background: var(--accent-dim); border-color: rgba(201,168,76,0.3);
-    color: var(--accent);
-  }
-  .chip.green.selected {
-    background: var(--green-dim); border-color: rgba(109,186,122,0.3);
-    color: var(--green);
-  }
-  .profile-footer { padding: 16px 28px calc(var(--safe-bottom) + 16px); }
-
-  /* ─── Swipe ─── */
-  #swipe .swipe-header {
-    padding: calc(var(--safe-top) + 28px) 24px 12px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  #swipe .swipe-header h2 {
-    font-family: var(--serif); font-size: 20px; color: var(--text);
-    font-weight: 600; letter-spacing: -0.5px;
-  }
-  .match-btn {
-    position: relative; background: var(--bg-elevated);
-    border: 1px solid var(--border); border-radius: 8px;
-    padding: 7px 14px; color: var(--text); font-family: var(--sans);
-    font-size: 12px; cursor: pointer; font-weight: 500;
-  }
-  .match-btn .badge {
-    position: absolute; top: -5px; right: -5px;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: var(--accent); font-size: 9px; font-weight: 700;
-    color: var(--bg); display: flex; align-items: center; justify-content: center;
-  }
-  .card-area {
-    flex: 1; display: flex; align-items: center; justify-content: center;
-    padding: 4px 16px 0; position: relative; overflow: hidden;
-  }
-  .card-stack { position: relative; width: 100%; max-width: 380px; height: 100%; max-height: 600px; }
-
-  /* Card */
-  .property-card {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    border-radius: 14px; overflow: hidden;
-    background: var(--bg-card); border: 1px solid var(--border);
-    display: flex; flex-direction: column;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    will-change: transform; touch-action: none;
-    cursor: grab;
-  }
+  /* ── SWIPE ── */
+  .bk-swipe-header { display: flex; justify-content: space-between; align-items: center; padding: 32px 0 16px; }
+  .bk-swipe-header h2 { font-size: 20px; font-weight: 600; color: #1e1a16; letter-spacing: -0.02em; }
+  .match-pill { font-size: 12px; font-weight: 500; color: #6b5f55; background: #e8e1d9; border: 1px solid #ccc4bb; padding: 6px 14px; border-radius: 999px; cursor: pointer; position: relative; font-family: inherit; }
+  .match-pill .badge { position: absolute; top: -5px; right: -5px; width: 16px; height: 16px; border-radius: 50%; background: #8a9baa; font-size: 9px; font-weight: 700; color: #f0ebe4; display: none; align-items: center; justify-content: center; }
+  .card-area { position: relative; width: 100%; height: min(560px, calc(100vh - 340px)); min-height: 400px; }
+  .property-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e8e1d9; border: 1px solid #ccc4bb; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 24px rgba(30,26,22,0.08); touch-action: none; cursor: grab; user-select: none; will-change: transform; }
   .property-card:active { cursor: grabbing; }
-  .property-card.behind {
-    transform: scale(0.95); opacity: 0.3; filter: blur(1px);
-    z-index: 0; pointer-events: none;
-  }
-  .property-card.exiting-left {
-    transition: all 0.3s ease-out;
-    transform: translateX(-120vw) rotate(-15deg); opacity: 0;
-  }
-  .property-card.exiting-right {
-    transition: all 0.3s ease-out;
-    transform: translateX(120vw) rotate(15deg); opacity: 0;
-  }
-  .card-image {
-    height: 50%; background-size: cover; background-position: center;
-    position: relative; transition: height 0.3s ease;
-  }
-  .card-image .gradient {
-    position: absolute; bottom: 0; left: 0; right: 0; height: 100px;
-    background: linear-gradient(transparent, var(--bg-card));
-  }
-  .card-image .info { position: absolute; bottom: 14px; left: 16px; right: 16px; }
+  .property-card.behind { transform: scale(0.97); opacity: 0.5; z-index: 0; pointer-events: none; }
+  .property-card.exiting-left { transition: all 0.3s ease-out; transform: translateX(-120vw) rotate(-12deg); opacity: 0; }
+  .property-card.exiting-right { transition: all 0.3s ease-out; transform: translateX(120vw) rotate(12deg); opacity: 0; }
+  .card-image { height: 46%; background-size: cover; background-position: center; position: relative; }
+  .card-image .grad { position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(transparent, #e8e1d9); }
+  .card-image .info { position: absolute; bottom: 12px; left: 16px; right: 16px; }
   .card-badges { display: flex; gap: 6px; margin-bottom: 6px; }
-  .card-badge {
-    font-family: var(--sans); font-size: 9px; font-weight: 600;
-    letter-spacing: 0.8px; text-transform: uppercase;
-    padding: 3px 8px; border-radius: 3px;
-  }
-  .card-badge.hqs { color: var(--green); background: rgba(109,186,122,0.1); border: 1px solid rgba(109,186,122,0.2); }
-  .card-badge.verified { color: var(--accent); background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2); }
-  .card-name {
-    font-family: var(--serif); font-size: 21px; color: var(--text);
-    font-weight: 600; letter-spacing: -0.3px;
-  }
-  .card-location {
-    font-family: var(--sans); font-size: 12px; color: var(--text-muted); margin-top: 2px;
-  }
-  .card-body { flex: 1; padding: 14px 16px; overflow-y: auto; background: var(--bg-card); }
-  .cost-box {
-    border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;
-  }
-  .cost-box.in-budget { background: var(--green-dim); border: 1px solid rgba(109,186,122,0.2); }
-  .cost-box.over-budget { background: var(--accent-dim); border: 1px solid rgba(201,168,76,0.2); }
+  .card-badge { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; }
+  .card-badge.hqs { color: #4a8a5c; background: rgba(74,138,92,0.12); border: 1px solid rgba(74,138,92,0.2); }
+  .card-badge.ver { color: #8a9baa; background: rgba(138,155,170,0.12); border: 1px solid rgba(138,155,170,0.2); }
+  .card-name { font-size: 20px; font-weight: 600; color: #1e1a16; letter-spacing: -0.02em; }
+  .card-loc { font-size: 12px; font-weight: 300; color: #6b5f55; margin-top: 2px; }
+  .card-body { flex: 1; padding: 14px 16px; overflow-y: auto; background: #e8e1d9; }
+  .cost-box { background: #dfd7cd; border: 1px solid #ccc4bb; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; }
   .cost-row { display: flex; justify-content: space-between; align-items: baseline; }
-  .cost-label {
-    font-family: var(--sans); font-size: 11px; color: var(--text-muted);
-    text-transform: uppercase; letter-spacing: 1.5px;
-  }
-  .cost-amount { font-family: var(--sans); font-size: 26px; font-weight: 700; }
-  .cost-amount.green { color: var(--green); }
-  .cost-amount.gold { color: var(--accent); }
-  .cost-amount span { font-size: 13px; font-weight: 400; color: var(--text-muted); }
+  .cost-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #a8998d; }
+  .cost-amount { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+  .cost-amount.in { color: #4a8a5c; }
+  .cost-amount.over { color: #b87333; }
+  .cost-amount span { font-size: 13px; font-weight: 300; color: #a8998d; }
   .cost-detail { display: flex; justify-content: space-between; margin-top: 4px; }
-  .cost-detail span { font-family: var(--sans); font-size: 11px; color: var(--text-dim); }
-  .cost-status { font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 0.5px; }
-  .cost-status.in { color: var(--green); }
-  .cost-status.over { color: var(--red); }
+  .cost-detail span { font-size: 11px; color: #a8998d; font-weight: 300; }
+  .cost-status { font-weight: 600; font-size: 10px; letter-spacing: 0.05em; }
+  .cost-status.in { color: #4a8a5c; }
+  .cost-status.over { color: #b87333; }
   .stats-row { display: flex; gap: 6px; margin-bottom: 12px; }
-  .stat-box {
-    flex: 1; text-align: center; padding: 8px 2px;
-    background: var(--bg-elevated); border-radius: 6px;
-    border: 1px solid var(--border);
-    font-family: var(--sans); font-size: 11px; color: var(--text-muted); font-weight: 500;
-  }
+  .stat-box { flex: 1; text-align: center; padding: 8px 2px; background: #f0ebe4; border: 1px solid #ccc4bb; border-radius: 8px; font-size: 11px; font-weight: 500; color: #6b5f55; }
   .amenities { display: flex; gap: 5px; flex-wrap: wrap; }
-  .amenity {
-    font-family: var(--sans); font-size: 10px; color: var(--text-muted);
-    padding: 4px 10px; border-radius: 20px;
-    border: 1px solid var(--border);
-  }
-  .tap-hint {
-    font-family: var(--sans); font-size: 10px; color: var(--text-dim);
-    text-align: center; margin-top: 10px;
-  }
-  .expanded-info {
-    margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
-    display: none;
-  }
+  .amenity { font-size: 10px; color: #6b5f55; padding: 4px 10px; border: 1px solid #ccc4bb; border-radius: 999px; }
+  .tap-hint { font-size: 10px; color: #a8998d; text-align: center; margin-top: 10px; }
+  .expanded-info { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid #ccc4bb; }
   .expanded-info.show { display: block; }
   .score-row { display: flex; gap: 24px; }
-  .score-label {
-    font-family: var(--sans); font-size: 10px; color: var(--text-dim);
-    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px;
-  }
-  .score-value { font-family: var(--sans); font-size: 22px; font-weight: 700; }
-
-  /* Swipe indicators */
-  .swipe-label {
-    position: absolute; top: 28px; z-index: 10;
-    font-family: var(--sans); font-weight: 700; font-size: 15px; letter-spacing: 3px;
-    padding: 6px 14px; border-radius: 4px; opacity: 0;
-    pointer-events: none;
-  }
-  .swipe-label.pass { left: 20px; color: var(--red); border: 2px solid var(--red); transform: rotate(-12deg); }
-  .swipe-label.tour { right: 20px; color: var(--green); border: 2px solid var(--green); transform: rotate(12deg); }
-
-  /* Action buttons */
-  .actions {
-    display: flex; justify-content: center; gap: 28px;
-    padding: 10px 20px calc(var(--safe-bottom) + 16px);
-  }
-  .action-btn {
-    width: 58px; height: 58px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px; cursor: pointer; transition: all 0.2s ease;
-    border: 1.5px solid;
-  }
-  .action-btn.pass-btn { background: var(--red-dim); border-color: rgba(212,93,93,0.3); }
-  .action-btn.tour-btn { background: var(--green-dim); border-color: rgba(109,186,122,0.3); }
+  .score-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #a8998d; margin-bottom: 2px; }
+  .score-value { font-size: 22px; font-weight: 600; }
+  .swipe-label { position: absolute; top: 24px; z-index: 10; font-size: 14px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; padding: 6px 14px; border-radius: 6px; opacity: 0; pointer-events: none; }
+  .swipe-label.pass { left: 16px; color: #c0564f; border: 2px solid #c0564f; transform: rotate(-12deg); }
+  .swipe-label.tour { right: 16px; color: #4a8a5c; border: 2px solid #4a8a5c; transform: rotate(12deg); }
+  .actions { display: flex; justify-content: center; gap: 28px; padding: 16px 0 0; }
+  .action-btn { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; transition: all 0.2s; }
+  .action-btn.pass { background: rgba(192,86,79,0.08); border: 1.5px solid rgba(192,86,79,0.25); }
+  .action-btn.tour { background: rgba(74,138,92,0.08); border: 1.5px solid rgba(74,138,92,0.25); }
   .action-btn:active { transform: scale(1.1); }
+  .done-state { text-align: center; padding: 60px 24px; display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+  .done-state .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8a9baa; margin-bottom: 14px; }
+  .done-state h3 { font-size: clamp(24px, 5vw, 36px); font-weight: 600; letter-spacing: -0.025em; color: #1e1a16; margin-bottom: 8px; line-height: 1.1; }
+  .done-state h3 em { font-style: italic; color: #8a9baa; }
+  .done-state p { font-size: 14px; font-weight: 300; color: #6b5f55; line-height: 1.6; max-width: 300px; margin: 0 auto 28px; }
 
-  /* ─── Done state ─── */
-  .done-state { text-align: center; padding: 40px 24px; }
-  .done-state .micro {
-    font-family: var(--sans); font-size: 11px; letter-spacing: 3px;
-    color: var(--text-dim); text-transform: uppercase; margin-bottom: 16px;
-  }
-  .done-state h3 {
-    font-family: var(--serif); font-size: 28px; color: var(--text);
-    font-weight: 600; letter-spacing: -0.5px; margin-bottom: 8px;
-  }
-  .done-state h3 em { font-style: italic; color: var(--text-muted); font-weight: 500; }
-  .done-state p {
-    font-family: var(--sans); font-size: 14px; color: var(--text-muted);
-    line-height: 1.6; margin-bottom: 28px;
-  }
-  .done-state .btn-primary { width: auto; display: inline-block; }
-
-  /* ─── Matches ─── */
-  #matches .matches-header {
-    padding: calc(var(--safe-top) + 28px) 24px 16px;
-    display: flex; align-items: center; gap: 12px;
-    border-bottom: 1px solid var(--border);
-  }
-  .back-btn {
-    background: none; border: none; color: var(--accent);
-    font-size: 18px; cursor: pointer; padding: 4px;
-  }
-  .matches-header .micro {
-    font-family: var(--sans); font-size: 11px; letter-spacing: 3px;
-    text-transform: uppercase; color: var(--text-dim); margin-bottom: 2px;
-  }
-  .matches-header h2 {
-    font-family: var(--serif); font-size: 22px; color: var(--text); font-weight: 600;
-  }
-  .matches-header h2 em { font-style: italic; color: var(--text-muted); font-weight: 500; }
-  .matches-scroll { flex: 1; overflow-y: auto; padding: 16px 24px; }
-  .match-card {
-    display: flex; gap: 14px; padding: 14px;
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 10px; margin-bottom: 10px;
-  }
-  .match-thumb {
-    width: 80px; height: 80px; border-radius: 8px; flex-shrink: 0;
-    background-size: cover; background-position: center;
-  }
+  /* ── MATCHES ── */
+  .bk-matches-header { display: flex; align-items: center; gap: 12px; padding: 32px 0 20px; border-bottom: 1px solid #ccc4bb; margin-bottom: 16px; }
+  .back-btn { background: none; border: none; font-size: 16px; color: #8a9baa; cursor: pointer; padding: 4px; }
+  .bk-matches-header h2 { font-size: 22px; font-weight: 600; color: #1e1a16; }
+  .bk-matches-header h2 em { font-style: italic; color: #8a9baa; }
+  .match-card { display: flex; gap: 14px; padding: 14px; background: #e8e1d9; border: 1px solid #ccc4bb; border-radius: 14px; margin-bottom: 10px; }
+  .match-thumb { width: 80px; height: 80px; border-radius: 10px; flex-shrink: 0; background-size: cover; background-position: center; }
   .match-info { flex: 1; min-width: 0; }
-  .match-name {
-    font-family: var(--serif); font-size: 15px; color: var(--text);
-    font-weight: 600; margin-bottom: 3px;
-  }
-  .match-meta {
-    font-family: var(--sans); font-size: 11px; color: var(--text-muted); margin-bottom: 10px;
-  }
+  .match-name { font-size: 15px; font-weight: 600; color: #1e1a16; margin-bottom: 3px; }
+  .match-meta { font-size: 11px; font-weight: 300; color: #6b5f55; margin-bottom: 10px; }
   .match-bottom { display: flex; justify-content: space-between; align-items: center; }
-  .match-price { font-family: var(--sans); font-size: 17px; font-weight: 700; color: var(--green); }
-  .match-price span { font-size: 11px; font-weight: 400; color: var(--text-dim); }
-  .tour-btn-small {
-    background: transparent; border: 1px solid var(--border-light);
-    color: var(--text); padding: 5px 12px; border-radius: 6px;
-    font-family: var(--sans); font-size: 11px; font-weight: 600; cursor: pointer;
-    letter-spacing: 0.5px;
-  }
-  .empty-matches {
-    text-align: center; padding: 60px 20px;
-    font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--text-muted);
+  .match-price { font-size: 17px; font-weight: 600; color: #4a8a5c; }
+  .match-price span { font-size: 11px; font-weight: 300; color: #a8998d; }
+  .tour-btn-sm { background: #1e1a16; color: #f0ebe4; border: none; padding: 6px 14px; border-radius: 999px; font-size: 11px; font-weight: 500; cursor: pointer; font-family: inherit; }
+  .empty-matches { padding: 60px 20px; text-align: center; font-size: 16px; font-style: italic; color: #a8998d; }
+
+  @media (max-width: 720px) {
+    nav { height: 56px; padding: 0 20px; }
+    .nav-links { display: none; }
+    #nav-pill-desktop { display: none; }
+    .nav-hamburger { display: flex; }
+    .brand-name { font-size: 17px; }
+    .bk-hero { padding: 80px 20px 40px; }
+    .bk-app { padding: 0 16px 32px; }
+    .card-area { height: min(500px, calc(100vh - 320px)); min-height: 380px; }
   }
 </style>
 </head>
 <body>
 
-<!-- BIZBRIDGE NAV -->
-<nav class="bk-nav">
-  <div class="bk-nav-left">
-    <a href="index.html" class="bk-nav-back">← BizBridge</a>
-    <div class="bk-nav-divider"></div>
-    <span class="bk-nav-title">Bridge<span>Key</span></span>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="brand">
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none"><path d="M8 48 Q32 14 56 48" stroke="#f0ebe4" stroke-width="3.5" fill="none" stroke-linecap="round"/><line x1="4" y1="48" x2="60" y2="48" stroke="#f0ebe4" stroke-width="4" stroke-linecap="round"/><line x1="20" y1="48" x2="20" y2="36" stroke="#8a9baa" stroke-width="2.5" stroke-linecap="round"/><line x1="32" y1="48" x2="32" y2="25" stroke="#8a9baa" stroke-width="2.5" stroke-linecap="round"/><line x1="44" y1="48" x2="44" y2="36" stroke="#8a9baa" stroke-width="2.5" stroke-linecap="round"/></svg>
+    <span class="brand-name">BizBridge</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#mission">Mission</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#process">Process</a></li>
+    <li><a href="bridgekey.html" class="active-page">BridgeKey</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#contact" class="nav-pill" id="nav-pill-desktop">Get Involved</a>
+    <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
-  <span class="bk-nav-badge">Beta</span>
 </nav>
-
-<!-- ═══════ SPLASH ═══════ -->
-<div id="splash" class="screen active" onclick="goTo('onboard')">
-  <div class="glow"></div>
-  <div class="content">
-    <p class="sub">A BizBridge Product</p>
-    <h1>BridgeKey</h1>
-    <p class="tagline">Unlock your next home.</p>
-    <div class="line"></div>
-    <p class="tap">Tap to begin</p>
-  </div>
+<div class="nav-mobile-open" id="mobile-menu">
+  <a href="index.html#mission" onclick="closeMenu()">Mission</a>
+  <a href="index.html#services" onclick="closeMenu()">Services</a>
+  <a href="index.html#process" onclick="closeMenu()">Process</a>
+  <a href="index.html#contact" onclick="closeMenu()">Get Involved</a>
 </div>
 
-<!-- ═══════ ONBOARD ═══════ -->
-<div id="onboard" class="screen">
-  <div class="inner" id="onboard-inner">
-    <p class="step-num" id="ob-num">01</p>
-    <h2 id="ob-title"></h2>
-    <p class="desc" id="ob-desc"></p>
-    <div class="dots" id="ob-dots"></div>
-    <button class="btn-primary" id="ob-btn" onclick="nextOnboard()">Next</button>
-  </div>
-</div>
+<!-- HERO -->
+<section class="bk-hero">
+  <p class="eyebrow">BridgeKey &middot; Beta</p>
+  <h1>Find your next home,<br><span class="pewter">swipe by swipe.</span></h1>
+  <p class="sub">Section 8 housing discovery built for voucher holders. See only what you can afford. Request tours instantly.</p>
+</section>
 
-<!-- ═══════ PROFILE ═══════ -->
-<div id="profile" class="screen">
-  <div class="profile-header">
-    <p class="micro">Profile</p>
-    <h2>Tell us about <em>your search.</em></h2>
-  </div>
-  <div class="profile-scroll">
-    <p class="field-label">Voucher Amount (Monthly)</p>
-    <div class="field-input-wrap">
-      <span class="dollar">$</span>
-      <input type="number" class="field-input" id="inp-voucher" placeholder="950">
-    </div>
+<!-- APP -->
+<div class="bk-app">
 
-    <p class="field-label">Monthly Budget (Out of Pocket)</p>
-    <div class="field-input-wrap">
-      <span class="dollar">$</span>
-      <input type="number" class="field-input" id="inp-budget" placeholder="300">
-    </div>
-
-    <p class="field-label">Household Size</p>
-    <div class="chips" id="chips-household"></div>
-
-    <p class="field-label">Bedrooms</p>
-    <div class="chips" id="chips-bedrooms"></div>
-
-    <p class="field-label">Preferred Areas</p>
-    <div class="chips" id="chips-areas"></div>
-
-    <p class="field-label">Must-Haves</p>
-    <div class="chips" id="chips-musthaves"></div>
-  </div>
-  <div class="profile-footer">
-    <button class="btn-primary" onclick="goTo('swipe')">Start Swiping</button>
-  </div>
-</div>
-
-<!-- ═══════ SWIPE ═══════ -->
-<div id="swipe" class="screen">
-  <div class="swipe-header">
-    <h2>BridgeKey</h2>
-    <button class="match-btn" onclick="goTo('matches')">
-      <span id="match-count">0</span> matches
-      <span class="badge" id="match-badge" style="display:none">0</span>
-    </button>
-  </div>
-  <div class="card-area">
-    <div class="card-stack" id="card-stack"></div>
-    <div class="done-state" id="done-state" style="display:none">
-      <p class="micro">All caught up</p>
-      <h3 id="done-count"></h3>
-      <p>New listings are added daily. We'll notify you when something new fits your search.</p>
-      <button class="btn-primary" onclick="goTo('matches')">View Matches</button>
+  <!-- PROFILE -->
+  <div class="bk-screen active" id="screen-profile">
+    <div class="bk-profile">
+      <p class="section-label">Your Profile</p>
+      <h2>Tell us about <em>your search.</em></h2>
+      <p>We match you to homes within your voucher and budget.</p>
+      <p class="f-label">Voucher Amount (Monthly)</p>
+      <div class="f-input-wrap"><span class="dollar">$</span><input type="number" class="f-input" id="inp-voucher" placeholder="950" /></div>
+      <p class="f-label">Monthly Budget (Out of Pocket)</p>
+      <div class="f-input-wrap"><span class="dollar">$</span><input type="number" class="f-input" id="inp-budget" placeholder="300" /></div>
+      <p class="f-label">Household Size</p><div class="chips" id="chips-household"></div>
+      <p class="f-label">Bedrooms</p><div class="chips" id="chips-bedrooms"></div>
+      <p class="f-label">Preferred Areas</p><div class="chips" id="chips-areas"></div>
+      <p class="f-label">Must-Haves</p><div class="chips" id="chips-musthaves"></div>
+      <button class="btn-dark" onclick="startSwiping()">Start Swiping &rarr;</button>
     </div>
   </div>
-  <div class="actions" id="actions">
-    <button class="action-btn pass-btn" onclick="swipeCard('left')">✕</button>
-    <button class="action-btn tour-btn" onclick="swipeCard('right')">🏠</button>
-  </div>
-</div>
 
-<!-- ═══════ MATCHES ═══════ -->
-<div id="matches" class="screen">
-  <div class="matches-header">
-    <button class="back-btn" onclick="goTo('swipe')">←</button>
-    <div>
-      <p class="micro">Your matches</p>
+  <!-- SWIPE -->
+  <div class="bk-screen" id="screen-swipe">
+    <div class="bk-swipe-header">
+      <h2>BridgeKey</h2>
+      <button class="match-pill" onclick="showScreen('matches')"><span id="match-count">0</span> matches<span class="badge" id="match-badge">0</span></button>
+    </div>
+    <div class="card-area" id="card-area">
+      <div id="card-stack"></div>
+      <div class="done-state" id="done-state">
+        <p class="eyebrow">All caught up</p>
+        <h3 id="done-count"></h3>
+        <p>New listings are added daily. We'll notify you when something new fits your search.</p>
+        <button class="btn-dark" style="width:auto" onclick="showScreen('matches')">View Matches &rarr;</button>
+      </div>
+    </div>
+    <div class="actions" id="actions">
+      <button class="action-btn pass" onclick="swipeCard('left')">✕</button>
+      <button class="action-btn tour" onclick="swipeCard('right')">🏠</button>
+    </div>
+  </div>
+
+  <!-- MATCHES -->
+  <div class="bk-screen" id="screen-matches">
+    <div class="bk-matches-header">
+      <button class="back-btn" onclick="showScreen('swipe')">←</button>
       <h2 id="matches-title"></h2>
     </div>
+    <div id="matches-list"></div>
   </div>
-  <div class="matches-scroll" id="matches-list"></div>
 </div>
 
 <script>
-/* ═══════════════════════════════════════════
-   DATA
-   ═══════════════════════════════════════════ */
-const PROPERTIES = [
-  {
-    id:1, name:"Maple Ridge Apartments", address:"1247 Maple Ave, Memphis, TN 38104",
-    neighborhood:"Midtown", bd:2, ba:1, sqft:920, totalRent:1050, voucherCovers:780, oop:270,
-    amenities:["In-Unit Laundry","Central AC","Parking","Pet Friendly"],
-    image:"https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80",
-    available:"Apr 15, 2026", hqs:true, verified:true, walk:82, transit:64,
-  },
-  {
-    id:2, name:"Riverside Commons", address:"3820 Riverside Dr, Memphis, TN 38115",
-    neighborhood:"Hickory Hill", bd:3, ba:2, sqft:1280, totalRent:1200, voucherCovers:950, oop:250,
-    amenities:["Dishwasher","Fenced Yard","Garage","Playground"],
-    image:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80",
-    available:"May 1, 2026", hqs:true, verified:true, walk:45, transit:38,
-  },
-  {
-    id:3, name:"Union Lofts", address:"455 Union Ave, Memphis, TN 38103",
-    neighborhood:"Downtown", bd:1, ba:1, sqft:680, totalRent:895, voucherCovers:680, oop:215,
-    amenities:["Rooftop Access","Gym","Doorman","Bike Storage"],
-    image:"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
-    available:"Available Now", hqs:true, verified:false, walk:94, transit:78,
-  },
-  {
-    id:4, name:"Oakwood Village", address:"2100 Park Ave, Memphis, TN 38114",
-    neighborhood:"Orange Mound", bd:3, ba:1.5, sqft:1100, totalRent:975, voucherCovers:800, oop:175,
-    amenities:["Central AC","Washer/Dryer Hookup","Porch","Storage"],
-    image:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
-    available:"Apr 20, 2026", hqs:true, verified:true, walk:58, transit:42,
-  },
-  {
-    id:5, name:"Shelby Creek Townhomes", address:"780 Shelby Oaks Dr, Memphis, TN 38134",
-    neighborhood:"Bartlett", bd:2, ba:2, sqft:1050, totalRent:1150, voucherCovers:850, oop:300,
-    amenities:["Attached Garage","Patio","Community Pool","Dog Park"],
-    image:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
-    available:"May 15, 2026", hqs:false, verified:true, walk:35, transit:22,
-  },
-  {
-    id:6, name:"Parkway Flats", address:"1890 Elvis Presley Blvd, Memphis, TN 38106",
-    neighborhood:"Whitehaven", bd:2, ba:1, sqft:850, totalRent:925, voucherCovers:725, oop:200,
-    amenities:["Central AC","On-Site Laundry","Gated Entry","Bus Stop"],
-    image:"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
-    available:"Available Now", hqs:true, verified:true, walk:62, transit:55,
-  },
-  {
-    id:7, name:"Cordova Crossing", address:"990 N Germantown Pkwy, Cordova, TN 38018",
-    neighborhood:"Cordova", bd:3, ba:2.5, sqft:1400, totalRent:1350, voucherCovers:1050, oop:300,
-    amenities:["2-Car Garage","Fireplace","Patio","Walk-In Closets"],
-    image:"https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=800&q=80",
-    available:"Jun 1, 2026", hqs:true, verified:false, walk:28, transit:15,
-  },
-  {
-    id:8, name:"Frayser Family Homes", address:"2544 Dellwood Ave, Memphis, TN 38127",
-    neighborhood:"Frayser", bd:3, ba:1, sqft:1050, totalRent:850, voucherCovers:700, oop:150,
-    amenities:["Fenced Yard","Carport","Central AC","Near Schools"],
-    image:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80",
-    available:"Apr 10, 2026", hqs:true, verified:true, walk:40, transit:30,
-  },
+const PROPS=[
+{id:1,name:"Maple Ridge Apartments",addr:"1247 Maple Ave, Memphis, TN 38104",hood:"Midtown",bd:2,ba:1,sqft:920,rent:1050,voucher:780,oop:270,amenities:["In-Unit Laundry","Central AC","Parking","Pet Friendly"],img:"https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80",avail:"Apr 15, 2026",hqs:true,ver:true,walk:82,transit:64},
+{id:2,name:"Riverside Commons",addr:"3820 Riverside Dr, Memphis, TN 38115",hood:"Hickory Hill",bd:3,ba:2,sqft:1280,rent:1200,voucher:950,oop:250,amenities:["Dishwasher","Fenced Yard","Garage","Playground"],img:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80",avail:"May 1, 2026",hqs:true,ver:true,walk:45,transit:38},
+{id:3,name:"Union Lofts",addr:"455 Union Ave, Memphis, TN 38103",hood:"Downtown",bd:1,ba:1,sqft:680,rent:895,voucher:680,oop:215,amenities:["Rooftop Access","Gym","Doorman","Bike Storage"],img:"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",avail:"Available Now",hqs:true,ver:false,walk:94,transit:78},
+{id:4,name:"Oakwood Village",addr:"2100 Park Ave, Memphis, TN 38114",hood:"Orange Mound",bd:3,ba:1.5,sqft:1100,rent:975,voucher:800,oop:175,amenities:["Central AC","Washer/Dryer Hookup","Porch","Storage"],img:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",avail:"Apr 20, 2026",hqs:true,ver:true,walk:58,transit:42},
+{id:5,name:"Shelby Creek Townhomes",addr:"780 Shelby Oaks Dr, Memphis, TN 38134",hood:"Bartlett",bd:2,ba:2,sqft:1050,rent:1150,voucher:850,oop:300,amenities:["Attached Garage","Patio","Community Pool","Dog Park"],img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",avail:"May 15, 2026",hqs:false,ver:true,walk:35,transit:22},
+{id:6,name:"Parkway Flats",addr:"1890 Elvis Presley Blvd, Memphis, TN 38106",hood:"Whitehaven",bd:2,ba:1,sqft:850,rent:925,voucher:725,oop:200,amenities:["Central AC","On-Site Laundry","Gated Entry","Bus Stop"],img:"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",avail:"Available Now",hqs:true,ver:true,walk:62,transit:55},
+{id:7,name:"Cordova Crossing",addr:"990 N Germantown Pkwy, Cordova, TN 38018",hood:"Cordova",bd:3,ba:2.5,sqft:1400,rent:1350,voucher:1050,oop:300,amenities:["2-Car Garage","Fireplace","Patio","Walk-In Closets"],img:"https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=800&q=80",avail:"Jun 1, 2026",hqs:true,ver:false,walk:28,transit:15},
+{id:8,name:"Frayser Family Homes",addr:"2544 Dellwood Ave, Memphis, TN 38127",hood:"Frayser",bd:3,ba:1,sqft:1050,rent:850,voucher:700,oop:150,amenities:["Fenced Yard","Carport","Central AC","Near Schools"],img:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80",avail:"Apr 10, 2026",hqs:true,ver:true,walk:40,transit:30},
 ];
 
-/* ═══════════════════════════════════════════
-   STATE
-   ═══════════════════════════════════════════ */
-let currentScreen = 'splash';
-let obStep = 0;
-let cardIndex = 0;
-let matchedProperties = [];
-let profile = { voucher:'', budget:'300', household:null, bedrooms:null, areas:[], mustHaves:[] };
+let cardIdx=0,matches=[],profile={budget:300};
+let dragState={active:false,sx:0,sy:0,dx:0,dy:0,el:null};
 
-const obSteps = [
-  { num:'01', title:'Your voucher,<br><em>your power.</em>', desc:'Enter your voucher details. We only show homes you can actually afford. No heartbreak scrolling.' },
-  { num:'02', title:'Swipe to<br><em>discover.</em>', desc:'Love it? Swipe right to request a tour. Not for you? Swipe left. Simple as that.' },
-  { num:'03', title:'Connect and<br><em>move in.</em>', desc:'Match with landlords who welcome voucher holders. Schedule tours. Start your next chapter.' },
-];
+function toggleMenu(){document.getElementById('mobile-menu').classList.toggle('open');document.getElementById('nav-hamburger').classList.toggle('open');}
+function closeMenu(){document.getElementById('mobile-menu').classList.remove('open');document.getElementById('nav-hamburger').classList.remove('open');}
 
-/* ═══════════════════════════════════════════
-   NAVIGATION
-   ═══════════════════════════════════════════ */
-function goTo(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  setTimeout(() => {
-    document.getElementById(id).classList.add('active');
-    currentScreen = id;
-    if (id === 'onboard') renderOnboard();
-    if (id === 'swipe') renderSwipe();
-    if (id === 'matches') renderMatches();
-  }, 50);
+function showScreen(id){
+  document.querySelectorAll('.bk-screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  if(id==='swipe')renderCards();
+  if(id==='matches')renderMatches();
+  window.scrollTo({top:document.querySelector('.bk-app').offsetTop-80,behavior:'smooth'});
 }
 
-/* ═══════════════════════════════════════════
-   ONBOARD
-   ═══════════════════════════════════════════ */
-function renderOnboard() {
-  const s = obSteps[obStep];
-  document.getElementById('ob-num').textContent = s.num;
-  document.getElementById('ob-title').innerHTML = s.title;
-  document.getElementById('ob-desc').textContent = s.desc;
-  document.getElementById('ob-btn').textContent = obStep < 2 ? 'Next' : 'Build My Profile';
-  let dots = '';
-  obSteps.forEach((_, i) => { dots += `<div class="dot ${i === obStep ? 'active' : ''}"></div>`; });
-  document.getElementById('ob-dots').innerHTML = dots;
+function initProfile(){
+  mkChips('chips-household',['1 person','2 people','3 people','4 people','5+'],'household');
+  mkChips('chips-bedrooms',['Studio','1 BR','2 BR','3 BR','4+ BR'],'bedrooms');
+  mkChips('chips-areas',['Downtown','Midtown','Hickory Hill','Orange Mound','Bartlett','Whitehaven','Frayser','Cordova'],'areas',true);
+  mkChips('chips-musthaves',['Pet Friendly','Parking','In-Unit Laundry','Accessible','Yard'],'mustHaves',true,true);
 }
-function nextOnboard() {
-  if (obStep < 2) {
-    const inner = document.getElementById('onboard-inner');
-    inner.style.opacity = '0';
-    setTimeout(() => { obStep++; renderOnboard(); inner.style.opacity = '1'; }, 300);
-  } else {
-    initProfile();
-    goTo('profile');
-  }
-}
-
-/* ═══════════════════════════════════════════
-   PROFILE
-   ═══════════════════════════════════════════ */
-function initProfile() {
-  renderChips('chips-household', ['1 person','2 people','3 people','4 people','5+ people'], 'household');
-  renderChips('chips-bedrooms', ['Studio','1 BR','2 BR','3 BR','4+ BR'], 'bedrooms');
-  renderChips('chips-areas', ['Downtown','Midtown','Hickory Hill','Orange Mound','Bartlett','Whitehaven','Frayser','Cordova'], 'areas', true);
-  renderChips('chips-musthaves', ['Pet Friendly','Parking','In-Unit Laundry','Accessible','Yard'], 'mustHaves', true, true);
-}
-
-function renderChips(containerId, options, key, multi=false, green=false) {
-  const el = document.getElementById(containerId);
-  el.innerHTML = '';
-  options.forEach(opt => {
-    const chip = document.createElement('button');
-    chip.className = 'chip' + (green ? ' green' : '');
-    chip.textContent = opt;
-    chip.onclick = () => {
-      if (multi) {
-        const arr = profile[key] || [];
-        if (arr.includes(opt)) { profile[key] = arr.filter(x => x !== opt); }
-        else { profile[key] = [...arr, opt]; }
-      } else {
-        profile[key] = profile[key] === opt ? null : opt;
-      }
-      updateChipStates(containerId, key, multi);
+function mkChips(id,opts,key,multi,alt){
+  const el=document.getElementById(id);
+  opts.forEach(o=>{
+    const c=document.createElement('button');c.className='chip';c.textContent=o;
+    c.onclick=()=>{
+      if(multi){const a=profile[key]||[];profile[key]=a.includes(o)?a.filter(x=>x!==o):[...a,o];}
+      else{profile[key]=profile[key]===o?null:o;}
+      el.querySelectorAll('.chip').forEach(ch=>{
+        const sel=multi?(profile[key]||[]).includes(ch.textContent):profile[key]===ch.textContent;
+        ch.className='chip'+(sel?(alt?' selected-alt':' selected'):'');
+      });
     };
-    el.appendChild(chip);
+    el.appendChild(c);
   });
 }
+function startSwiping(){profile.budget=parseInt(document.getElementById('inp-budget').value)||300;showScreen('swipe');}
 
-function updateChipStates(containerId, key, multi) {
-  const el = document.getElementById(containerId);
-  const chips = el.querySelectorAll('.chip');
-  chips.forEach(c => {
-    const val = c.textContent;
-    const selected = multi ? (profile[key] || []).includes(val) : profile[key] === val;
-    c.classList.toggle('selected', selected);
-  });
+function renderCards(){
+  const stack=document.getElementById('card-stack'),acts=document.getElementById('actions'),done=document.getElementById('done-state');
+  stack.innerHTML='';
+  if(cardIdx>=PROPS.length){acts.style.display='none';done.style.display='flex';const n=matches.length;document.getElementById('done-count').innerHTML=n+' '+(n===1?'match':'matches')+' <em>found.</em>';return;}
+  acts.style.display='flex';done.style.display='none';
+  if(cardIdx+1<PROPS.length)stack.appendChild(mkCard(PROPS[cardIdx+1],true));
+  const card=mkCard(PROPS[cardIdx],false);stack.appendChild(card);initDrag(card);updateMatchUI();
+}
+function mkCard(p,behind){
+  const inB=p.oop<=profile.budget,av=p.avail==='Available Now'?'Now':p.avail.replace(', 2026',''),sc=v=>v>=70?'#4a8a5c':v>=50?'#b87333':'#c0564f';
+  const d=document.createElement('div');d.className='property-card'+(behind?' behind':'');
+  d.innerHTML=`<div class="swipe-label pass">PASS</div><div class="swipe-label tour">TOUR</div>
+    <div class="card-image" style="background-image:url('${p.img}')"><div class="grad"></div><div class="info">
+      <div class="card-badges">${p.hqs?'<span class="card-badge hqs">HQS Inspected</span>':''}${p.ver?'<span class="card-badge ver">Verified</span>':''}</div>
+      <div class="card-name">${p.name}</div><div class="card-loc">${p.hood} · ${p.addr.split(',')[0]}</div></div></div>
+    <div class="card-body" onclick="toggleExp(this)">
+      <div class="cost-box"><div class="cost-row"><span class="cost-label">Your cost</span><span class="cost-amount ${inB?'in':'over'}">$${p.oop}<span>/mo</span></span></div>
+        <div class="cost-detail"><span>Total $${p.rent} · Voucher $${p.voucher}</span><span class="cost-status ${inB?'in':'over'}">${inB?'IN BUDGET':'OVER BUDGET'}</span></div></div>
+      <div class="stats-row"><div class="stat-box">${p.bd} BD</div><div class="stat-box">${p.ba} BA</div><div class="stat-box">${p.sqft} sf</div><div class="stat-box">${av}</div></div>
+      <div class="amenities">${p.amenities.map(a=>'<span class="amenity">'+a+'</span>').join('')}</div>
+      <div class="expanded-info"><div class="score-row"><div><p class="score-label">Walk Score</p><p class="score-value" style="color:${sc(p.walk)}">${p.walk}</p></div><div><p class="score-label">Transit</p><p class="score-value" style="color:${sc(p.transit)}">${p.transit}</p></div></div></div>
+      <p class="tap-hint">Tap for details</p></div>`;
+  return d;
+}
+function toggleExp(b){const i=b.querySelector('.expanded-info'),h=b.querySelector('.tap-hint');const s=i.classList.toggle('show');h.textContent=s?'Tap to collapse':'Tap for details';}
+
+function initDrag(card){
+  const start=(x,y)=>{dragState={active:true,sx:x,sy:y,dx:0,dy:0,el:card};card.style.transition='none';};
+  const move=(x,y)=>{if(!dragState.active)return;dragState.dx=x-dragState.sx;dragState.dy=y-dragState.sy;card.style.transform=`translateX(${dragState.dx}px) translateY(${dragState.dy*0.2}px) rotate(${dragState.dx*0.06}deg)`;card.querySelector('.swipe-label.pass').style.opacity=Math.min(1,Math.max(0,-dragState.dx/80));card.querySelector('.swipe-label.tour').style.opacity=Math.min(1,Math.max(0,dragState.dx/80));};
+  const end=()=>{if(!dragState.active)return;dragState.active=false;if(Math.abs(dragState.dx)>100){completeSwipe(dragState.dx>0?'right':'left');}else{card.style.transition='all 0.4s cubic-bezier(0.16,1,0.3,1)';card.style.transform='';card.querySelector('.swipe-label.pass').style.opacity='0';card.querySelector('.swipe-label.tour').style.opacity='0';}};
+  card.addEventListener('mousedown',e=>{e.preventDefault();start(e.clientX,e.clientY);});
+  window.addEventListener('mousemove',e=>move(e.clientX,e.clientY));
+  window.addEventListener('mouseup',end);
+  card.addEventListener('touchstart',e=>start(e.touches[0].clientX,e.touches[0].clientY),{passive:true});
+  card.addEventListener('touchmove',e=>move(e.touches[0].clientX,e.touches[0].clientY),{passive:true});
+  card.addEventListener('touchend',end);
+}
+function completeSwipe(dir){const card=dragState.el;card.classList.add(dir==='right'?'exiting-right':'exiting-left');if(dir==='right')matches.push(PROPS[cardIdx]);updateMatchUI();setTimeout(()=>{cardIdx++;renderCards();},300);}
+function swipeCard(dir){const stack=document.getElementById('card-stack');const card=stack.querySelector('.property-card:not(.behind)');if(!card)return;dragState.el=card;card.classList.add(dir==='right'?'exiting-right':'exiting-left');if(dir==='right')matches.push(PROPS[cardIdx]);updateMatchUI();setTimeout(()=>{cardIdx++;renderCards();},300);}
+function updateMatchUI(){const n=matches.length;document.getElementById('match-count').textContent=n;const b=document.getElementById('match-badge');if(n>0){b.style.display='flex';b.textContent=n;}else{b.style.display='none';}}
+
+function renderMatches(){
+  const n=matches.length;document.getElementById('matches-title').innerHTML=n+' '+(n===1?'home':'homes')+' <em>saved.</em>';
+  const list=document.getElementById('matches-list');
+  if(n===0){list.innerHTML='<p class="empty-matches">No matches yet. Keep swiping.</p>';return;}
+  list.innerHTML=matches.map(p=>`<div class="match-card"><div class="match-thumb" style="background-image:url('${p.img}')"></div><div class="match-info"><div class="match-name">${p.name}</div><div class="match-meta">${p.hood} · ${p.bd}BD / ${p.ba}BA</div><div class="match-bottom"><span class="match-price">$${p.oop}<span>/mo</span></span><button class="tour-btn-sm" onclick="alert('Tour request sent for ${p.name}!')">Request Tour</button></div></div></div>`).join('');
 }
 
-/* ═══════════════════════════════════════════
-   SWIPE ENGINE
-   ═══════════════════════════════════════════ */
-let dragState = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, el: null };
-
-function renderSwipe() {
-  const budget = parseInt(document.getElementById('inp-budget')?.value) || 300;
-  profile.budget = budget;
-  updateMatchUI();
-  renderCards();
-}
-
-function renderCards() {
-  const stack = document.getElementById('card-stack');
-  const actions = document.getElementById('actions');
-  const done = document.getElementById('done-state');
-  stack.innerHTML = '';
-
-  if (cardIndex >= PROPERTIES.length) {
-    actions.style.display = 'none';
-    done.style.display = 'block';
-    const n = matchedProperties.length;
-    document.getElementById('done-count').innerHTML = `${n} ${n === 1 ? 'match' : 'matches'} <em>found.</em>`;
-    return;
-  }
-
-  actions.style.display = 'flex';
-  done.style.display = 'none';
-
-  // Behind card
-  if (cardIndex + 1 < PROPERTIES.length) {
-    const behind = buildCard(PROPERTIES[cardIndex + 1], true);
-    stack.appendChild(behind);
-  }
-
-  // Active card
-  const card = buildCard(PROPERTIES[cardIndex], false);
-  stack.appendChild(card);
-  initDrag(card);
-}
-
-function buildCard(p, isBehind) {
-  const budget = profile.budget;
-  const inBudget = p.oop <= budget;
-  const avail = p.available === 'Available Now' ? 'Now' : p.available.replace(', 2026','');
-  const scoreColor = v => v >= 70 ? 'var(--green)' : v >= 50 ? 'var(--accent)' : 'var(--red)';
-
-  const div = document.createElement('div');
-  div.className = 'property-card' + (isBehind ? ' behind' : '');
-  div.innerHTML = `
-    <div class="swipe-label pass">PASS</div>
-    <div class="swipe-label tour">TOUR</div>
-    <div class="card-image" style="background-image:url('${p.image}')">
-      <div class="gradient"></div>
-      <div class="info">
-        <div class="card-badges">
-          ${p.hqs ? '<span class="card-badge hqs">HQS Inspected</span>' : ''}
-          ${p.verified ? '<span class="card-badge verified">Verified</span>' : ''}
-        </div>
-        <div class="card-name">${p.name}</div>
-        <div class="card-location">${p.neighborhood} · ${p.address.split(',')[0]}</div>
-      </div>
-    </div>
-    <div class="card-body" onclick="toggleExpand(this)">
-      <div class="cost-box ${inBudget ? 'in-budget' : 'over-budget'}">
-        <div class="cost-row">
-          <span class="cost-label">Your cost</span>
-          <span class="cost-amount ${inBudget ? 'green' : 'gold'}">$${p.oop}<span>/mo</span></span>
-        </div>
-        <div class="cost-detail">
-          <span>Total $${p.totalRent} · Voucher $${p.voucherCovers}</span>
-          <span class="cost-status ${inBudget ? 'in' : 'over'}">${inBudget ? 'IN BUDGET' : 'OVER BUDGET'}</span>
-        </div>
-      </div>
-      <div class="stats-row">
-        <div class="stat-box">${p.bd} BD</div>
-        <div class="stat-box">${p.ba} BA</div>
-        <div class="stat-box">${p.sqft} sf</div>
-        <div class="stat-box">${avail}</div>
-      </div>
-      <div class="amenities">
-        ${p.amenities.map(a => `<span class="amenity">${a}</span>`).join('')}
-      </div>
-      <div class="expanded-info">
-        <div class="score-row">
-          <div>
-            <p class="score-label">Walk Score</p>
-            <p class="score-value" style="color:${scoreColor(p.walk)}">${p.walk}</p>
-          </div>
-          <div>
-            <p class="score-label">Transit</p>
-            <p class="score-value" style="color:${scoreColor(p.transit)}">${p.transit}</p>
-          </div>
-        </div>
-      </div>
-      <p class="tap-hint">Tap for details</p>
-    </div>
-  `;
-  return div;
-}
-
-function toggleExpand(body) {
-  const info = body.querySelector('.expanded-info');
-  const hint = body.querySelector('.tap-hint');
-  const isShowing = info.classList.contains('show');
-  info.classList.toggle('show');
-  hint.textContent = isShowing ? 'Tap for details' : 'Tap to collapse';
-}
-
-/* ─── Touch/Mouse Drag ─── */
-function initDrag(card) {
-  const onStart = (x, y) => {
-    dragState = { active: true, startX: x, startY: y, dx: 0, dy: 0, el: card };
-    card.style.transition = 'none';
-  };
-  const onMove = (x, y) => {
-    if (!dragState.active) return;
-    dragState.dx = x - dragState.startX;
-    dragState.dy = y - dragState.startY;
-    const rot = dragState.dx * 0.06;
-    card.style.transform = `translateX(${dragState.dx}px) translateY(${dragState.dy * 0.2}px) rotate(${rot}deg)`;
-    // Labels
-    const pass = card.querySelector('.swipe-label.pass');
-    const tour = card.querySelector('.swipe-label.tour');
-    pass.style.opacity = Math.min(1, Math.max(0, -dragState.dx / 80));
-    tour.style.opacity = Math.min(1, Math.max(0, dragState.dx / 80));
-  };
-  const onEnd = () => {
-    if (!dragState.active) return;
-    dragState.active = false;
-    if (Math.abs(dragState.dx) > 100) {
-      const dir = dragState.dx > 0 ? 'right' : 'left';
-      completeSwipe(dir);
-    } else {
-      card.style.transition = 'all 0.4s cubic-bezier(0.16,1,0.3,1)';
-      card.style.transform = '';
-      card.querySelector('.swipe-label.pass').style.opacity = '0';
-      card.querySelector('.swipe-label.tour').style.opacity = '0';
-    }
-  };
-
-  card.addEventListener('mousedown', e => { e.preventDefault(); onStart(e.clientX, e.clientY); });
-  window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
-  window.addEventListener('mouseup', onEnd);
-  card.addEventListener('touchstart', e => onStart(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
-  card.addEventListener('touchmove', e => onMove(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
-  card.addEventListener('touchend', onEnd);
-}
-
-function completeSwipe(dir) {
-  const card = dragState.el;
-  card.classList.add(dir === 'right' ? 'exiting-right' : 'exiting-left');
-
-  if (dir === 'right') {
-    matchedProperties.push(PROPERTIES[cardIndex]);
-    updateMatchUI();
-  }
-
-  setTimeout(() => { cardIndex++; renderCards(); }, 300);
-}
-
-function swipeCard(dir) {
-  const stack = document.getElementById('card-stack');
-  const card = stack.querySelector('.property-card:not(.behind)');
-  if (!card) return;
-  dragState.el = card;
-  card.classList.add(dir === 'right' ? 'exiting-right' : 'exiting-left');
-  if (dir === 'right') {
-    matchedProperties.push(PROPERTIES[cardIndex]);
-    updateMatchUI();
-  }
-  setTimeout(() => { cardIndex++; renderCards(); }, 300);
-}
-
-function updateMatchUI() {
-  const n = matchedProperties.length;
-  document.getElementById('match-count').textContent = n;
-  const badge = document.getElementById('match-badge');
-  if (n > 0) { badge.style.display = 'flex'; badge.textContent = n; }
-  else { badge.style.display = 'none'; }
-}
-
-/* ═══════════════════════════════════════════
-   MATCHES
-   ═══════════════════════════════════════════ */
-function renderMatches() {
-  const n = matchedProperties.length;
-  document.getElementById('matches-title').innerHTML = `${n} ${n===1?'home':'homes'} <em>saved.</em>`;
-  const list = document.getElementById('matches-list');
-
-  if (n === 0) {
-    list.innerHTML = '<p class="empty-matches">No matches yet. Keep swiping.</p>';
-    return;
-  }
-
-  list.innerHTML = matchedProperties.map(p => `
-    <div class="match-card">
-      <div class="match-thumb" style="background-image:url('${p.image}')"></div>
-      <div class="match-info">
-        <div class="match-name">${p.name}</div>
-        <div class="match-meta">${p.neighborhood} · ${p.bd}BD / ${p.ba}BA</div>
-        <div class="match-bottom">
-          <span class="match-price">$${p.oop}<span>/mo</span></span>
-          <button class="tour-btn-small" onclick="requestTour('${p.name}')">Request Tour</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function requestTour(name) {
-  alert('Tour request sent for ' + name + '! A BridgeKey coordinator will follow up within 24 hours.');
-}
-
-/* ═══════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════ */
-renderOnboard();
+initProfile();
 </script>
 </body>
 </html>
